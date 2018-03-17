@@ -56,7 +56,6 @@ local options = {
 		{
 			{"Accuracy", 20, 20, 350, 240, 120},
 			{"Smooth", "Slider", 0, 60, 54},
-			{"Anti Spread", "Checkbox", false, 0},
 			{"Anti Recoil", "Checkbox", false, 0},
 		},
 		{
@@ -68,12 +67,15 @@ local options = {
 		
 	},
 	{
-		{"TriggerBot", 380, 230, 350, 230, 140},
-		{"Enabled", "Checkbox", false, 0},
-		{"Auto Fire", "Checkbox", false, 0},
-		
-	
-},
+		{"TriggerBot", 380, 230, 350, 50, 140},
+		{"Enabled", "Checkbox", false, 0},	
+    },
+    	{
+		{"TriggerBot Filter", 380, 290, 350, 75, 140},
+		{"NPC", "Checkbox", false, 0},
+		{"Players", "Checkbox", false, 0},
+
+    },
 	},
 	["Ragebot"] = {
 		{
@@ -97,7 +99,6 @@ local options = {
 		},
 		{
 			{"Accuracy", 380, 20, 350, 190, 120},
-			{"Anti Spread", "Checkbox", false, 0},
 			{"Anti Recoil", "Checkbox", false, 0},
 		},
 		{
@@ -116,7 +117,7 @@ local options = {
 			{"ESP", 20, 20, 250, 550, 120},
 			{"Enabled", "Checkbox", false, 0},
 			{"Box", "Checkbox", false, 0},
-			{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
+			{"Box Type", "Selection", "2D Box", {"2D Box", "Edges"}, 100},
 			{"Name", "Checkbox", false, 0},
 			-- {"Health", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
@@ -256,7 +257,7 @@ local options = {
 			
 		},	
 		 {
-			{"NPC", 550, 405, 250, 175, 130},
+			{"NPC", 550, 405, 230, 175, 130},
 			{"R", "Slider", 0, 255, 54},
 			{"G", "Slider", 255, 255, 54},
 			{"B", "Slider", 0, 255, 54},
@@ -1405,13 +1406,51 @@ local function meme(ucmd)
 	--end
 end
 
+local function Triggerbotnpc(ucmd)
+local ply = LocalPlayer()
+local pweapon = ply:GetActiveWeapon():GetClass()
+if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "NPC")) then 
+if (pweapon ~= "weapon_crowbar" && pweapon ~= "gmod_tool" 
+&& pweapon ~= "weapon_physgun" && pweapon ~= "gmod_camera"
+ && pweapon ~= "weapon_physcannon" && pweapon ~= "weapon_frag" && pweapon ~= "weapon_slam"
+ && pweapon ~= "laserpointer" && pweapon ~= "laserpointer"
+ && pweapon ~= "laserpointer" ) then
+if ply:GetEyeTrace().Entity:IsNPC() then
+
+cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
+	else
+cm.SetButtons(ucmd, bit.band( cm.GetButtons(ucmd), bit.bnot( 1 ) ) );
+	end
+end
+end
+end
+
+local function Triggerbot(ucmd)
+local ply = LocalPlayer()
+local pweapon = ply:GetActiveWeapon():GetClass()
+if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "Players")) then 
+if (pweapon ~= "weapon_crowbar" && pweapon ~= "gmod_tool" 
+&& pweapon ~= "weapon_physgun" && pweapon ~= "gmod_camera"
+ && pweapon ~= "weapon_physcannon" && pweapon ~= "weapon_frag" && pweapon ~= "weapon_slam"
+ && pweapon ~= "laserpointer" && pweapon ~= "laserpointer"
+ && pweapon ~= "laserpointer" ) then
+if ply:GetEyeTrace().Entity:IsPlayer() then
+cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
+	else
+cm.SetButtons(ucmd, bit.band( cm.GetButtons(ucmd), bit.bnot( 1 ) ) );
+	end
+end
+end
+end
+
 
 hook.Add("CreateMove", "memmeme", function(ucmd)
 	meme(ucmd);
 	aimer(ucmd);
 	antiaimer(ucmd);
 	salty.edgejump(ucmd);
-	
+	Triggerbotnpc(ucmd);	
+	Triggerbot(ucmd);
 end);
 
 local function bhoops(ucmd)
@@ -1569,9 +1608,11 @@ local function radar()
 	local frame = vgui.Create("DFrame");
 	local rdist = gBool("Visuals", "Other", "Radar Size");
 	frame:SetSize(rdist, rdist);
+
 	frame:SetPos(50,175);
-	frame:SetTitle("radar");
+	frame:SetTitle("Radar");
 	frame:SetVisible( true )
+
 	--frame:MakePopup();
 	frame:ShowCloseButton(false);
 	
@@ -1798,9 +1839,34 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 			local diff2 = math.abs(y2 - y1);
             surface.SetDrawColor(r,g,b)
 			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+
 	end
 end
 end
+if(gBool("Visuals", "Filter", "Dark rp")) then
+	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+	for k, v in pairs(ents.FindByClass("money_printer")) do
+		--print("func works")
+	
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+        surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
+            end
+            end
+            end
 end )
 
 hook.Add("HUDPaint", "moneyprintername", function()
@@ -1835,6 +1901,29 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 	end
 end
 end
+if(gBool("Visuals", "Filter", "Dark rp")) then
+	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+	for k, v in pairs(ents.FindByClass("spawned_*")) do
+
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+            		surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
+            end
+            end
+            end
 end )
 hook.Add("HUDPaint", "darkrpspawnedname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark rp")) then
@@ -1866,8 +1955,33 @@ if(gBool("Visuals", "Filter", "Weapons")) then
 			local diff2 = math.abs(y2 - y1);
             surface.SetDrawColor(r,g,b)
 			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+end
+	end		
+         end
+             end
+if(gBool("Visuals", "Filter", "Weapons")) then
+if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+		for k, v in pairs(ents.FindByClass("weapon_*")) do
+		
+           if ( v:GetOwner() == NULL ) then
+		    local r = gInt("Colors", "Weapons", "R");
+		   local g = gInt("Colors", "Weapons", "G");
+		  local b = gInt("Colors", "Weapons", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+		surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
 		end
-	end
+		end
 end
 end
 end )
@@ -1922,6 +2036,28 @@ hook.Add("HUDPaint", "itembox", function()
 	
 end
 end
+	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges" && gBool("Visuals", "Filter", "Items")) then	
+	for k, v in pairs(ents.FindByClass("item_*")) do
+
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+					surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
+	
+end
+end
 end )
 
 hook.Add("HUDPaint", "npcbox", function()
@@ -1937,6 +2073,28 @@ hook.Add("HUDPaint", "npcbox", function()
 			local diff2 = math.abs(y2 - y1);
             surface.SetDrawColor(r,g,b)
 			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+	
+end
+end
+	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges" && gBool("Visuals", "Filter", "NPC")) then	
+	for k, v in pairs(ents.FindByClass("npc_*")) do
+
+		    local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+		surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
 	
 end
 end
