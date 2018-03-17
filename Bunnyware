@@ -241,6 +241,27 @@ local options = {
 			{"Not Visible B", "Slider", 0, 255, 54},
 			
 		},
+       {
+			{"Weapons", 20, 405, 250, 175, 130},
+			{"R", "Slider", 0, 255, 54},
+			{"G", "Slider", 0, 255, 54},
+			{"B", "Slider", 255, 255, 54},
+			
+		},
+         {
+			{"Items", 290, 405, 250, 175, 130},
+			{"R", "Slider", 0, 255, 54},
+			{"G", "Slider", 255, 255, 54},
+			{"B", "Slider", 0, 255, 54},
+			
+		},	
+		 {
+			{"NPC", 550, 405, 250, 175, 130},
+			{"R", "Slider", 0, 255, 54},
+			{"G", "Slider", 255, 255, 54},
+			{"B", "Slider", 0, 255, 54},
+			
+		},		
 	},
 	["Gui"] = {
 		{
@@ -257,7 +278,7 @@ local options = {
 		},
 		},
 };
-
+// template for pos =  left/right, up/down,
 local order = {
 	"LegitBot",
 	"Ragebot",
@@ -1698,24 +1719,51 @@ if (gOption("Misc", "Other", "Kill Message")) then
 	 }
 RunConsoleCommand("say", messagetable[math.random( 1, #messagetable )])
 
+
+
+
 end
 end)
+local function Get2DBounds(v)
+	local min,max = v:OBBMins(),v:OBBMaxs()
+
+	local corners = {
+		Vector(min.x,min.y,min.z),
+		Vector(min.x,min.y,max.z),
+		Vector(min.x,max.y,min.z),
+		Vector(min.x,max.y,max.z),
+		Vector(max.x,min.y,min.z),
+		Vector(max.x,min.y,max.z),
+		Vector(max.x,max.y,min.z),
+		Vector(max.x,max.y,max.z)
+	}
+
+	local minx,miny,maxx,maxy = math.huge, math.huge, -math.huge, -math.huge;
+
+	for _, corner in next, corners do
+		local screen = v:LocalToWorld(corner):ToScreen();
+		minx,miny = math.min(minx,screen.x),math.min(miny,screen.y);
+		maxx,maxy = math.max(maxx,screen.x),math.max(maxy,screen.y);
+	end
+	return minx,miny,maxx,maxy;
+end
+
 hook.Add("HUDPaint", "gunlabbox", function()
 if(gBool("Visuals", "Filter", "Dark rp")) then
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("gun*")) do
 		--print("func works")
 		
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y / 5.0 - penemy.y / 5.0;
-		local w = h / 2.2;
-		surface.SetDrawColor(255, 255, 0, 255);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2, enemyPos.y - h, w, h);
-		surface.SetDrawColor(255, 0, 0, 225);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 - 1, enemyPos.y - h - 1, w + 2, h + 2);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 + 1, enemyPos.y - h + 1, w - 2, h - 2);
-	--	draw.RoundedBox(2,enemyPos.x-5,enemyPos.y-5,10,10,Color(240,20,20,200))
+	
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
 	end
 end
 end
@@ -1740,17 +1788,16 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("money_printer")) do
 		--print("func works")
-		
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y / 5.0 - penemy.y / 5.0;
-		local w = h / 2.2;
-		surface.SetDrawColor(255, 255, 0, 255);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2, enemyPos.y - h, w, h);
-		surface.SetDrawColor(255, 0, 0, 225);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 - 1, enemyPos.y - h - 1, w + 2, h + 2);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 + 1, enemyPos.y - h + 1, w - 2, h - 2);
-	--	draw.RoundedBox(2,enemyPos.x-5,enemyPos.y-5,10,10,Color(240,20,20,200))
+	
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
 	end
 end
 end
@@ -1775,18 +1822,16 @@ hook.Add("HUDPaint", "darkrpspawnedbox", function()
 if(gBool("Visuals", "Filter", "Dark rp")) then
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("spawned_*")) do
-		--print("func works")
-		
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y / 5.0 - penemy.y / 5.0;
-		local w = h / 2.2;
-		surface.SetDrawColor(255, 255, 0, 255);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2, enemyPos.y - h, w, h);
-		surface.SetDrawColor(255, 0, 0, 225);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 - 1, enemyPos.y - h - 1, w + 2, h + 2);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 + 1, enemyPos.y - h + 1, w - 2, h - 2);
-	--	draw.RoundedBox(2,enemyPos.x-5,enemyPos.y-5,10,10,Color(240,20,20,200))
+
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
 	end
 end
 end
@@ -1811,20 +1856,17 @@ if(gBool("Visuals", "Filter", "Weapons")) then
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("weapon_*")) do
 		
-				local pheight = v:OBBMaxs(v)
-
-		local plow = v:OBBMins(v)
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y / 5.0 - penemy.y / 5.0;
-
-		local w = h + v:GetModelRadius() + 15;
-		surface.SetDrawColor(255, 255, 0, 255);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2, enemyPos.y - h, w, h);
-		surface.SetDrawColor(255, 0, 0, 225);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 - 1, enemyPos.y - h - 1, w + 2, h + 2);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 + 1, enemyPos.y - h + 1, w - 2, h - 2);
-	--	draw.RoundedBox(2,enemyPos.x-5,enemyPos.y-5,10,10,Color(240,20,20,200))
+           if ( v:GetOwner() == NULL ) then
+		    local r = gInt("Colors", "Weapons", "R");
+		   local g = gInt("Colors", "Weapons", "G");
+		  local b = gInt("Colors", "Weapons", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+		end
 	end
 end
 end
@@ -1832,21 +1874,23 @@ end )
 hook.Add("HUDPaint", "weaponname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Weapons")) then
 	    for k, v in pairs(ents.FindByClass("weapon_*")) do
+	    	if ( v:GetOwner() == NULL ) then
 		local enemyPos = v:GetPos(v)
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
 		local h = enemyPos.y - penemy.y;
 		local w = h / 2.2;
 		local tw, th = surface.GetTextSize(v:GetClass());
 	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
 		
 		surface.DrawText(v:GetClass());
+	end
 end
 end
 end)
 
 
-hook.Add("HUDPaint", "weaponname", function()
+hook.Add("HUDPaint", "itemname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Items")) then
 	    for k, v in pairs(ents.FindByClass("item_*")) do
 		local enemyPos = v:GetPos(v)
@@ -1855,32 +1899,44 @@ hook.Add("HUDPaint", "weaponname", function()
 		local w = h / 2.2;
 		local tw, th = surface.GetTextSize(v:GetClass());
 	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
 		
 		surface.DrawText(v:GetClass());
 end
 end
 end)
 
+hook.Add("HUDPaint", "itembox", function()
+	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box" && gBool("Visuals", "Filter", "Items")) then	
+	for k, v in pairs(ents.FindByClass("item_*")) do
+
+		    local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+	
+end
+end
+end )
+
 hook.Add("HUDPaint", "npcbox", function()
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box" && gBool("Visuals", "Filter", "NPC")) then	
 	for k, v in pairs(ents.FindByClass("npc_*")) do
 
-		--print("func works")
-		local center = v:OBBCenter()
-	
-		local pheight = v:OBBMaxs(v)
-		local plow = v:OBBMins(v)
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - plow), vm.ToScreen( enemyPos + pheight );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2;
-		surface.SetDrawColor(255, 255, 0, 255);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2, enemyPos.y - h, w, h);
-		surface.SetDrawColor(255, 0, 0, 225);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 - 1, enemyPos.y - h - 1, w + 2, h + 2);
-		surface.DrawOutlinedRect( enemyPos.x - w / 2 + 1, enemyPos.y - h + 1, w - 2, h - 2);
-	--	draw.RoundedBox(2,enemyPos.x-5,enemyPos.y-5,10,10,Color(240,20,20,200))
+		    local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
 	
 end
 end
@@ -1891,17 +1947,17 @@ hook.Add("HUDPaint", "npchealth", function()
 		for k, v in pairs(ents.FindByClass("npc_*")) do
 		--print("func works")
 		
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local hp = v:Health() * h / 100;
-		if(hp > h) then hp = h; end
-		local diff = h - hp;
-		surface.SetDrawColor(0, 0, 0, 255);
-		surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
-		surface.SetDrawColor( ( 100 - v.Health(v) ) * 2.55, v.Health(v) * 2.55, 0, 255);
-		surface.DrawRect(enemyPos.x - w / 2 - 4, enemyPos.y - h + diff, 1, hp);
+					local x1,y1,x2,y2 = Get2DBounds(v);
+			local color = Color(255,45,255)
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+			surface.SetDrawColor(0, 0, 0, 255);
+			surface.DrawLine(x1-4, y1+1,x1-4,y2-1)
+			surface.SetDrawColor(255 - 2.55 * v:Health(), 2.55 * v:Health(),0)
+			surface.DrawRect(x1-5, y2-(diff2/100 * v:Health()),3,diff2/100*(v:Health()))
+			surface.SetDrawColor(5,5,5)
+
 	end
 end
 end)
@@ -1938,7 +1994,7 @@ hook.Add("HUDPaint", "npcname", function()
 		local w = h / 2.2;
 		local tw, th = surface.GetTextSize(v.GetClass(v));
 		
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h - 25 - th );
 		
 		surface.DrawText(v.GetClass(v));
 end
@@ -1957,7 +2013,7 @@ hook.Add("HUDPaint", "npcweapon", function()
 		local w = h / 2.2;
 		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass(w));
 		
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 5 );
+		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
 		
 		surface.DrawText(v:GetActiveWeapon():GetClass(w));
 end
