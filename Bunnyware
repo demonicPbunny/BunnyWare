@@ -160,7 +160,8 @@ local options = {
    		    {"Viewmodel Fov", "Slider", 0, 150, 100},
 			{"Speed Indicator", "Checkbox", false, 0},
 			{"Wire Weapon", "Checkbox", false, 0},
-			--{"Damage Log", "Checkbox", false, 54},
+			//{"Wire World", "Checkbox", false, 0},
+			{"Damage Log", "Checkbox", false, 0},
 		},
 
 		
@@ -2309,6 +2310,25 @@ hook.Add("RenderScene", "asuswalls", function()
 end
 end)
 
+-- hook.Add("RenderScene", "WireWorld", function()
+-- 	if(gBool("Visuals", "Other", "Wire World")) then
+--      local asusvalue = gBool("Visuals", "Other", "Wire World");
+--       local matweapon = Material("models/wireframe")
+-- 	if(#mattable == 0) then
+-- 		for k,v in next, game.GetWorld():GetMaterials() do
+-- 			mattable[#mattable + 1] = Material(v);
+-- 		end
+-- 	end
+
+-- 	for k,v in next, mattable do
+-- 		v:SetTexture( "$basetexture", "editor/wireframe" )
+-- 		if(!gBool("Visuals", "Other", "Wire World")) then
+-- 		v:SetTexture( "$basetexture", "" )
+-- 	end
+-- 	end
+-- end
+-- end)
+
 function nightmode()
 local nightnum = gBool("Visuals", "Other", "Night Mode");
 if tonumber(nightnum) < 100 then
@@ -2700,3 +2720,9 @@ end
 end
 end
 end)
+
+hook.Add("ScalePlayerDamage", "hitmarker_scaleplayerdamage", function(ply, hitgroup, dmginfo)
+if(gBool("Visuals", "Other", "Damage Log")) then
+MsgC( Color( 0,255,0 ), ""..dmginfo:GetInflictor():Name().." Did "..dmginfo:GetDamage().." Damage To "..ply:Name().."\n")
+end
+end);
