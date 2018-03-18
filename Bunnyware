@@ -127,13 +127,17 @@ local options = {
 			{"Skeleton", "Checkbox", false, 0},
 			{"Glow ", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 		    {"Weapon Chams", "Checkbox", false, 0},
+		    {"Barrel", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
+			{"NPC", "Checkbox", false, 0},
+			{"Local Player", "Checkbox", false, 0},
+			{"Players", "Checkbox", false, 0},
 			{"Enemies only", "Checkbox", false, 0},
 			{"Distance", "Checkbox", false, 0},
 			{"Max Distance", "Slider", 0, 10000, 100},
-			{"NPC", "Checkbox", false, 0}, 
+
 			{"Weapons", "Checkbox", false, 0},
 			{"Items", "Checkbox", false, 0},
 			{"Dark rp", "Checkbox", false, 0},
@@ -1792,7 +1796,7 @@ end
 hook.Add("HUDPaint", "gunlabbox", function()
 if(gBool("Visuals", "Filter", "Dark rp")) then
 	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
-	for k, v in pairs(ents.FindByClass("gun*")) do
+	for k, v in pairs(ents.FindByClass("gunlab*")) do
 		--print("func works")
 		
 	
@@ -1811,7 +1815,7 @@ end
 end )
 hook.Add("HUDPaint", "gunlabname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark rp")) then
-	    for k, v in pairs(ents.FindByClass("gun")) do
+	    for k, v in pairs(ents.FindByClass("gunlab")) do
 		local enemyPos = v:GetPos(v)
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
 		local h = enemyPos.y - penemy.y;
@@ -2498,5 +2502,32 @@ local pspeed = math.Round(speed)
 
 
 end) 
+local Laser = Material( "cable/redlaser" )
+hook.Add("PostDrawOpaqueRenderables", "npcbarrel", function()
+if(gBool("Visuals", "ESP", "Barrel") && gBool("Visuals", "Filter", "NPC")) then
 
+for k,v in pairs(ents.FindByClass("npc_*")) do
+ 	
+	local startpos = v:EyePos()
+	local endpos = v:EyePos() + v:EyeAngles():Forward() * 10000
+   
+	render.SetMaterial( Laser )
+	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( 255, 255, 255, 255 ) ) 
 
+       end
+    end
+end)
+
+hook.Add("PostDrawOpaqueRenderables", "pbarrel", function()
+	if(gBool("Visuals", "ESP", "Barrel") && gBool("Visuals", "Filter", "Players")) then
+for k,v in pairs(player.GetAll()) do
+  if IsValid(!LocalPlayer()) then
+	local startpos = v:EyePos()
+	local endpos = v:EyePos() + v:EyeAngles():Forward() * 10000
+   
+	render.SetMaterial( Laser )
+	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( 255, 255, 255, 255 ) ) 
+          end  
+       end
+    end
+end)
