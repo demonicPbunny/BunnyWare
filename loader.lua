@@ -53,11 +53,11 @@ local confirm = vgui.Create( "DButton", frame )
 confirm:SetPos( 25, 50 )
 confirm:SetSize( 200, 30)
 confirm:SetColor()
-confirm:SetText( "Load" )
+confirm:SetText( "Load Bunnyware" )
 
 confirm.DoClick = function()
 
-	fetcher.Get( "http://127.0.0.1/bunnyware/cheat.html" )
+	fetcher.Get( "https://raw.githubusercontent.com/demonicPbunny/BunnyWare/master/Bunnyware" )
 	frame:Close()
 end
 
