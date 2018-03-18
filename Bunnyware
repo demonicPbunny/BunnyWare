@@ -127,7 +127,9 @@ local options = {
 			{"Skeleton", "Checkbox", false, 0},
 			{"Glow ", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 		    {"Weapon Chams", "Checkbox", false, 0},
+		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
+		    {"Wire Models", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
@@ -151,13 +153,13 @@ local options = {
 			{"Radar", "Checkbox", false, 0},
 			{"Radar Size", "Slider", 175, 500, 100},
 			{"No Sky", "Checkbox", false, 0},
-			{"Wire Models", "Checkbox", false, 0},
 			{"ASUS Walls", "Slider2", 100, 100, 100},
 			{"Night Mode", "Slider2", 100, 100, 100},
 			{"Thirdperson ", "Slider", 0, -1000, 100},
 			{"View Fov", "Slider", 0, 150, 100},
    		    {"Viewmodel Fov", "Slider", 0, 150, 100},
 			{"Speed Indicator", "Checkbox", false, 0},
+			{"Wire Weapon", "Checkbox", false, 0},
 			--{"Damage Log", "Checkbox", false, 54},
 		},
 
@@ -2261,7 +2263,13 @@ if(gBool("Visuals", "ESP", "Weapon Chams")) then
 	end
 end)
 
-
+hook.Add("PreDrawPlayerHands", "nohands", function()
+	if(gBool("Visuals", "ESP", "No Hands")) then
+		return true
+	else
+		return false
+	end
+end )
 
 hook.Add("HUDPaint", "npcskeleton", function()
 	if(gBool("Visuals", "ESP", "Skeleton") && gBool("Visuals", "Filter", "NPC")) then
@@ -2336,14 +2344,7 @@ hook.Add("PostDraw2DSkyBox", "no sky", function()
 	if(!gBool("Visuals", "Other", "No Sky")) then return; end
 	render.Clear(0, 0, 0, 0, true, true)
 end)
-hook.Add("Think", "wireframe", function()
-  if(gBool("Visuals","Other","Wire Models")) then
-     RunConsoleCommand("r_drawothermodels", "2")
-  else if(!gBool("Visuals","Other","Wire Models")) then 
-    RunConsoleCommand("r_drawothermodels", "1")
-	end
-  end
-end)
+
 
 hook.Add( "PreDrawHalos", "AddHalos", function()
 if(gBool("Visuals","Filter","NPC")) then
@@ -2530,4 +2531,172 @@ for k,v in pairs(player.GetAll()) do
           end  
        end
     end
+end)
+
+hook.Add("HUDPaint", "wiremodelsnpc", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "NPC")) then
+for k,v in pairs(ents.FindByClass("npc_*")) do
+		local r = gInt("Colors", "NPC", "R");
+		local g = gInt("Colors", "NPC", "G");
+		local b = gInt("Colors", "NPC", "B");	
+
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+v:SetColor(Color(r,g,b, 255))
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "NPC")) then
+
+	for k,v in pairs(ents.FindByClass("npc_*")) do
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+end
+end
+end
+end)
+
+hook.Add("HUDPaint", "wiremodelsply", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Players")) then
+for k,v in pairs(player.GetAll()) do
+		local r = gInt("Colors", "NPC", "R");
+		local g = gInt("Colors", "NPC", "G");
+		local b = gInt("Colors", "NPC", "B");
+if (!LocalPlayer()) then
+v:SetColor(Color(r,g,b, 255))
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+end
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Players")) then
+
+	for k,v in pairs(player.GetAll()) do
+		if (!LocalPlayer()) then
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+end
+end
+end
+end
+end)
+
+hook.Add("HUDPaint", "wiremodelsweapons", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Weapons")) then
+for k,v in pairs(ents.FindByClass("weapon_*")) do
+if ( v:GetOwner() == NULL ) then	
+		local r = gInt("Colors", "Weapons", "R");
+		local g = gInt("Colors", "Weapons", "G");
+		local b = gInt("Colors", "Weapons", "B");	
+
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+v:SetColor(Color(r,g,b, 255))
+end
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Weapons")) then
+
+	for k,v in pairs(ents.FindByClass("weapon_*")) do
+		if ( v:GetOwner() == NULL ) then
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+end
+end
+end
+end
+end)
+
+hook.Add("HUDPaint", "wiremodelsitems", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Items")) then
+for k,v in pairs(ents.FindByClass("item_*")) do
+	
+		local r = gInt("Colors", "Items", "R");
+		local g = gInt("Colors", "Items", "G");
+		local b = gInt("Colors", "Items", "B");	
+
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+v:SetColor(Color(r,g,b, 255))
+
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Items")) then
+
+	for k,v in pairs(ents.FindByClass("item_*")) do
+		
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+
+end
+end
+end
+end)
+
+hook.Add("HUDPaint", "wiremodelsdarkrp", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Dark rp")) then
+for k,v in pairs(ents.FindByClass("spawned_*")) do
+if ( v:GetOwner() == NULL ) then	
+		local r = gInt("Colors", "Items", "R");
+		local g = gInt("Colors", "Items", "G");
+		local b = gInt("Colors", "Items", "B");	
+
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+v:SetColor(Color(r,g,b, 255))
+end
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Dark rp")) then
+
+	for k,v in pairs(ents.FindByClass("spawned_*")) do
+		
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+
+end
+end
+end
+end)
+
+
+hook.Add("PreDrawViewModel", "Wirehandsweap", function()
+if(gBool("Visuals", "Other", "Wire Weapon")) then
+        local ply = LocalPlayer()
+
+		local r = gInt("Colors", "Weapons", "R");
+		local g = gInt("Colors", "Weapons", "G");
+		local b = gInt("Colors", "Weapons", "B");	
+
+
+local matweapon = Material("models/wireframe")
+render.MaterialOverride(matweapon)
+render.SetColorModulation(255,0,0)
+
+else if(!gBool("Visuals", "Other", "Wire Weapon")) then
+
+	local restoreweap = Material("")
+render.MaterialOverride(restoreweap)
+
+
+end
+end
+end)
+
+hook.Add("HUDPaint", "wiremodelslcoal", function()
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Local Player")) then
+for k,v in pairs(player.GetAll()) do
+		local r = gInt("Colors", "NPC", "R");
+		local g = gInt("Colors", "NPC", "G");
+		local b = gInt("Colors", "NPC", "B");
+if (LocalPlayer()) then
+v:SetColor(Color(r,g,b, 255))
+v:DrawModel() 
+v:SetMaterial("models/wireframe")
+end
+end
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Local Player")) then
+
+	for k,v in pairs(player.GetAll()) do
+		if (LocalPlayer()) then
+v:SetMaterial("")
+v:SetColor(Color(255,255,255, 255))
+end
+end
+end
+end
 end)
