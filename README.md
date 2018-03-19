@@ -6,7 +6,6 @@ Workshop: http://steamcommunity.com/sharedfiles/filedetails/?id=1335592481
   
 TodoList  
 Make esp text change on pdistance  
-Make GUI colors  
 Make LegitBot  
 
 Note: This is a Work in Progress!  
