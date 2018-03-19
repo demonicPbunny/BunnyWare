@@ -2949,7 +2949,7 @@ if(gBool("Visuals", "Other", "Wire Weapon")) then
 
 local matweapon = Material("models/wireframe")
 render.MaterialOverride(matweapon)
-render.SetColorModulation(255,0,0)
+render.SetColorModulation(r,g,b)
 
 else if(!gBool("Visuals", "Other", "Wire Weapon")) then
 
