@@ -1584,18 +1584,21 @@ local function memee(ucmd)
 	salty.edgejump(ucmd);
 	Triggerbotnpc(ucmd);	
 	Triggerbot(ucmd);
+	
 end
+hook.Add("CreateMove", "memmeme", memee)
+
 local function Bugfix(ucmd)
-if(ucmd:KeyDown(IN_USE)) then
+if(ucmd:KeyDown(IN_USE) && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 8) then
 hook.Remove("CreateMove", "memmeme")
 end
-if(!ucmd:KeyDown(IN_USE)) then
+if(!ucmd:KeyDown(IN_USE) && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then
 hook.Add("CreateMove", "memmeme", memee)
 end
 end
 hook.Add("CreateMove","PhysgunE", Bugfix)
-local function bhoops(ucmd)
 
+local function bhoops(ucmd)
 bunnyhop(ucmd);
 end
 
@@ -1628,7 +1631,7 @@ hook.Add("ShouldDrawLocalPlayer", "", function()
 end);
 // Auto Jump
 function bunnyhop(cmd)
-if(gOption("Misc", "Misc", "Auto Jump") == "Perfect") then	
+if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then	
 	
 		if(!me:IsOnGround() && cmd:KeyDown(IN_JUMP)) then
 			cmd:RemoveKey(IN_JUMP);
@@ -1638,7 +1641,7 @@ if(gOption("Misc", "Misc", "Auto Jump") == "Perfect") then
 			return
 		end
 		end
-	if(gBool("Misc", "Misc", "Auto-Strafe")) then
+	if(gBool("Misc", "Misc", "Auto-Strafe") && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then
 		if(!em.IsOnGround(me)) then
 			local mouseX = cmd:GetMouseX()
 				if(cmd:GetMouseX() > 1 || cmd:GetMouseX() < -1) then
