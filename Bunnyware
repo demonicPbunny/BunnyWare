@@ -348,7 +348,7 @@ local options = {
 	["Info"] = {
 		{
 			{"BunnyWare Info Box", 20, 20, 350, 240, 100},
-            {"Latest Update: 2018-03-19 4:25 PM GMT+1", "Checkbox", false, 0},
+            {"Latest Update: 2018-03-19 5:26 PM GMT+1", "Checkbox", false, 0},
 			{"My Steam ->", "Checkbox", false, 0, 54},
 			
 			--{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
