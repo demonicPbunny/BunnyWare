@@ -348,7 +348,7 @@ local options = {
 	["Info"] = {
 		{
 			{"BunnyWare Info Box", 20, 20, 350, 240, 100},
-            {"Latest Update: 2018-03-19 5:26 PM GMT+1", "Checkbox", false, 0},
+            {"Latest Update: 2018-03-19 5:33 PM GMT+1", "Checkbox", false, 0},
 			{"My Steam ->", "Checkbox", false, 0, 54},
 			
 			--{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
@@ -1540,9 +1540,9 @@ local function meme(ucmd)
 end
 
 local function Triggerbotnpc(ucmd)
+	if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "NPC")) then 
 local ply = LocalPlayer()
 local pweapon = ply:GetActiveWeapon():GetClass()
-if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "NPC")) then 
 if (pweapon ~= "weapon_crowbar" && pweapon ~= "gmod_tool" 
 && pweapon ~= "weapon_physgun" && pweapon ~= "gmod_camera"
  && pweapon ~= "weapon_physcannon" && pweapon ~= "weapon_frag" && pweapon ~= "weapon_slam"
@@ -1559,9 +1559,9 @@ end
 end
 
 local function Triggerbot(ucmd)
+	if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "Players")) then 
 local ply = LocalPlayer()
 local pweapon = ply:GetActiveWeapon():GetClass()
-if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "Players")) then 
 if (pweapon ~= "weapon_crowbar" && pweapon ~= "gmod_tool" 
 && pweapon ~= "weapon_physgun" && pweapon ~= "gmod_camera"
  && pweapon ~= "weapon_physcannon" && pweapon ~= "weapon_frag" && pweapon ~= "weapon_slam"
