@@ -348,7 +348,7 @@ local options = {
 	["Info"] = {
 		{
 			{"BunnyWare Info Box", 20, 20, 350, 240, 100},
-           -- {"Enable", "Checkbox", false, 0},
+            {"Latest Update: 2018-03-19 4:25 PM GMT+1", "Checkbox", false, 0},
 			{"My Steam ->", "Checkbox", false, 0, 54},
 			
 			--{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
@@ -1954,14 +1954,7 @@ local function radarbrain()
 hook.Add("Think", "radar", radarbrain);
 
 
-
-
-
-
-
-
-
-  hook.Add("HUDPaint", "crosshairp1", function()
+hook.Add("HUDPaint", "crosshairp1", function()
   if (gOption("Visuals", "Other", "Crosshair") == "Old") then
 				surface.SetDrawColor(Color(255, 0, 0, 255))
 		
@@ -3006,6 +2999,7 @@ chat.PlaySound()
 end	
 end
 hook.Add("ScalePlayerDamage", "dmglogchat", dmglogchat)
+
 
 
 
