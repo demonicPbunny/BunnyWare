@@ -40,6 +40,7 @@ function fetcher.Get( url )
 	end)
 end
 
+local function pmenu()
 local frame = vgui.Create( "DFrame" )
 frame:SetPos( (ScrW()/2) - 200, (ScrH()/2) - 50 )
 frame:SetSize( 250, 250 )
@@ -60,9 +61,12 @@ confirm.DoClick = function()
     surface.PlaySound("gaben.wav")
     surface.PlaySound("gaben.wav")
     surface.PlaySound("gaben.wav")
-    
+   
+
 	fetcher.Get( "https://raw.githubusercontent.com/demonicPbunny/BunnyWare/master/Bunnyware" )
 	frame:Close()
 end
-
-frame:MakePopup()
+end
+concommand.Add( "Loader", function( frame )
+pmenu()
+end )
