@@ -2723,6 +2723,6 @@ end)
 
 hook.Add("ScalePlayerDamage", "hitmarker_scaleplayerdamage", function(ply, hitgroup, dmginfo)
 if(gBool("Visuals", "Other", "Damage Log")) then
-MsgC( Color( 0,255,0 ), ""..dmginfo:GetInflictor():Name().." Did "..dmginfo:GetDamage().." Damage To "..ply:Name().."\n")
+MsgC( Color( 0,255,0 ), ""..dmginfo:GetInflictor():Name().." Did "..dmginfo:GetDamage().." Damage To "..ply:Name().. " Health Remaining:"..ply:Health()-dmginfo:GetDamage().. "\n")
 end
 end);
