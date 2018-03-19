@@ -1589,10 +1589,10 @@ end
 hook.Add("CreateMove", "memmeme", memee)
 
 local function Bugfix(ucmd)
-if(ucmd:KeyDown(IN_USE) && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 8) then
+if(ucmd:KeyDown(IN_USE)) then
 hook.Remove("CreateMove", "memmeme")
 end
-if(!ucmd:KeyDown(IN_USE) && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then
+if(!ucmd:KeyDown(IN_USE)) then
 hook.Add("CreateMove", "memmeme", memee)
 end
 end
