@@ -161,7 +161,7 @@ local options = {
 			{"Speed Indicator", "Checkbox", false, 0},
 			{"Wire Weapon", "Checkbox", false, 0},
 			//{"Wire World", "Checkbox", false, 0},
-			{"Damage Log", "Checkbox", false, 0},
+			{"Damage Log", "Selection", "Off", {"Off", "Console", "Chat"}, 100},
 		},
 
 		
@@ -2985,11 +2985,24 @@ end
 end
 end)
 
-hook.Add("ScalePlayerDamage", "hitmarker_scaleplayerdamage", function(ply, hitgroup, dmginfo)
-if(gBool("Visuals", "Other", "Damage Log")) then
+hook.Add("ScalePlayerDamage", "dmglogconsole", function(ply, hitgroup, dmginfo)
+if (gOption("Visuals", "Other", "Damage Log") == "Console") then
 MsgC( Color( 0,255,0 ), ""..dmginfo:GetInflictor():Name().." Did "..dmginfo:GetDamage().." Damage To "..ply:Name().. " Health Remaining:"..ply:Health()-dmginfo:GetDamage().. "\n")
 end
 end);
+
+
+local function dmglogchat(ply, hitgroup, dmginfo)
+if (gOption("Visuals", "Other", "Damage Log") == "Chat") then
+local pname = dmginfo:GetInflictor():Name()
+local pdamage = tostring(dmginfo:GetDamage())
+local phealth = tostring(ply:Health()-dmginfo:GetDamage())
+chat.AddText( Color( 0, 255, 0 ), pname, ", Did ", pdamage , " Damage To ", ply:Name(),", HP: ", phealth )
+chat.PlaySound()
+end	
+end
+hook.Add("ScalePlayerDamage", "dmglogchat", dmglogchat)
+
 
 local f2, f, htmlopen;
 local function htmlpage()
