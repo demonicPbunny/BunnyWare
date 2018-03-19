@@ -347,10 +347,11 @@ local options = {
 	},
 	["Info"] = {
 		{
-			{"Aimware.net/forum", 20, 20, 350, 240, 120},
+			{"BunnyWare Info Box", 20, 20, 350, 240, 100},
            -- {"Enable", "Checkbox", false, 0},
-			{"Visible R", "Slider", 255, 255, 130},
-			{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
+			{"My Steam ->", "Checkbox", false, 0, 54},
+			
+			--{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
 		},
 		},
 };
@@ -689,7 +690,7 @@ local function DrawSelect(self, w, h, var, maxy, posx, posy, dist)
 	local curopt = var[3];
 	
 	surface.SetFont("memeyou2");
-	
+
 		local rt = gInt("Gui", "Text", "R");
 	    local gt = gInt("Gui", "Text", "G");
 	    local bt = gInt("Gui", "Text", "B");
@@ -2978,3 +2979,47 @@ if(gBool("Visuals", "Other", "Damage Log")) then
 MsgC( Color( 0,255,0 ), ""..dmginfo:GetInflictor():Name().." Did "..dmginfo:GetDamage().." Damage To "..ply:Name().. " Health Remaining:"..ply:Health()-dmginfo:GetDamage().. "\n")
 end
 end);
+
+local f2, f, htmlopen;
+local function htmlpage()
+	local frame = vgui.Create("DFrame");
+	
+	frame:SetSize( ScrW() * 0.75, ScrH() * 0.75 );
+
+	frame:SetPos(50,175);
+	frame:SetTitle("My Steam");
+	frame:SetVisible( true )
+     frame:SetDraggable(true)
+	--frame:MakePopup();
+	frame:ShowCloseButton(false);
+local html = vgui.Create( "HTML", frame )
+html:Dock( FILL )
+html:OpenURL( "http://steamcommunity.com/id/droddie2/" )
+
+	frame.Think = function()
+		if (!gBool("Info", "BunnyWare Info Box", "My Steam ->")) then 
+		
+			frame:Remove();
+			htmlopen = false;
+			--candoslider = false;
+			--drawlast = nil;
+end
+end
+end
+
+local function htmlpagebrain()
+	if (gBool("Info", "BunnyWare Info Box", "My Steam ->") && !htmlopen && !f) then 
+	
+		htmlopen = true;
+		f = true;
+		htmlpage();
+	elseif (!gBool("Info", "BunnyWare Info Box", "My Steam ->") && !htmlopen) then
+		f = false;
+	end
+	if (gBool("Info", "BunnyWare Info Box", "My Steam ->") && f && htmlopen) then
+		f2 = true;
+	else
+		f3 = false;
+	end
+	end
+hook.Add("Think", "radar", htmlpagebrain);
