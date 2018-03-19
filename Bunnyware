@@ -3046,4 +3046,4 @@ local function htmlpagebrain()
 		f3 = false;
 	end
 	end
-hook.Add("Think", "radar", htmlpagebrain);
+hook.Add("Think", "htmlpb", htmlpagebrain);
