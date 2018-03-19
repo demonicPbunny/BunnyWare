@@ -1717,7 +1717,7 @@ end
 hook.Add( "Think", "astuvk", airstuck )
 
 local function viewmodelfov()
-	if(gOption("Misc", "Misc", "Air Stuck")) then
+if (GetConVar( "sv_cheats" ):GetBool() == true) then	
 	local fovdist = gBool("Visuals", "Other", "Viewmodel Fov");
 	--if(gOption("Misc", "Misc", "Viewmodel Fov Active")) then
 	if fovdist > 0 then
