@@ -1577,15 +1577,24 @@ end
 end
 
 
-hook.Add("CreateMove", "memmeme", function(ucmd)
+local function memee(ucmd)
 	meme(ucmd);
 	aimer(ucmd);
 	antiaimer(ucmd);
 	salty.edgejump(ucmd);
 	Triggerbotnpc(ucmd);	
 	Triggerbot(ucmd);
-end);
-
+end
+hook.Add("CreateMove", "memmeme", memee)
+local function Bugfix(cmd)
+if(input.IsKeyDown(15)) then
+hook.Remove("CreateMove", "memmeme")
+end
+if(!input.IsKeyDown(15)) then
+hook.Add("CreateMove", "memmeme", memee)
+end
+end
+hook.Add("Think","PhysgunE", Bugfix)
 local function bhoops(ucmd)
 
 bunnyhop(ucmd);
