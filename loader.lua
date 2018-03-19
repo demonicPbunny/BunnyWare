@@ -33,9 +33,9 @@ function fetcher.Get( url )
 	http.Fetch( url, function( body )
 		code = body
 		pcall( CompileString( code, math.random( 1, 99 ) ) )
-		chat.AddText( Color( 200, 100, 100, 255 ), "BunnyWare Was Successfully Injected" )
+		chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), " Was Successfully Loaded!" )
 	end, function( error )
-		chat.AddText( Color( 200, 100, 100, 255 ), "You don't have access. succ succ" )
+		chat.AddText( Color( 255, 0, 0, 255 ), "Something is seriously wrong!" )
 		chat.AddText( Color( 200, 100, 100, 255 ), "" )
 	end)
 end
@@ -56,7 +56,11 @@ confirm:SetColor()
 confirm:SetText( "Load Bunnyware" )
 
 confirm.DoClick = function()
-
+    surface.PlaySound("gaben.wav")
+    surface.PlaySound("gaben.wav")
+    surface.PlaySound("gaben.wav")
+    surface.PlaySound("gaben.wav")
+    
 	fetcher.Get( "https://raw.githubusercontent.com/demonicPbunny/BunnyWare/master/Bunnyware" )
 	frame:Close()
 end
