@@ -209,8 +209,8 @@ local options = {
 		},
 		{
 			{"Box - Enemy", 20, 205, 250, 175, 130},
-			{"R", "Slider", 180, 255, 88},
-			{"G", "Slider", 120, 255, 88},
+			{"R", "Slider", 255, 255, 88},
+			{"G", "Slider", 0, 255, 88},
 			{"B", "Slider", 0, 255, 88},
 		},
 		{
@@ -260,7 +260,7 @@ local options = {
 			{"Items", 290, 405, 250, 175, 130},
 			{"R", "Slider", 0, 255, 54},
 			{"G", "Slider", 255, 255, 54},
-			{"B", "Slider", 0, 255, 54},
+			{"B", "Slider", 255, 255, 54},
 			
 		},	
 		 {
@@ -1629,16 +1629,23 @@ local function radar()
 	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
 	surface.SetDrawColor( 255, 0, 0, 255 )
 
-	    surface.DrawLine(frame:GetWide()/2, (frame:GetTall()/2)-65, frame:GetWide()/2, (frame:GetTall()/2)+90)
-		surface.DrawLine((frame:GetWide()/2)-150, frame:GetTall()/1.9, (frame:GetWide()/2)+150, frame:GetTall()/1.9)
-		for k, v in pairs(ents.FindByClass("npc_*")) do
+	    surface.DrawLine(frame:GetWide()/1.94, (frame:GetTall()/2)-65, frame:GetWide()/1.94, (frame:GetTall()/2)+90)
+		surface.DrawLine((frame:GetWide()/2)-250, frame:GetTall()/1.94, (frame:GetWide()/2)+260, frame:GetTall()/1.94)
+        if (gBool("Visuals", "Filter", "NPC")) then 
+		for k, pnpc in pairs(ents.FindByClass("npc_*")) do
+			// colors
+         local rnpc = gInt("Colors", "NPC", "R");
+		local gnpc = gInt("Colors", "NPC", "G");
+		local bnpc = gInt("Colors", "NPC", "B");	
+
+			// colors
 		local ply = LocalPlayer()
-		local theirPos = v:GetPos()
+		local theirPos = pnpc:GetPos()
 		local myPos = ply:GetPos()
 		local ply = LocalPlayer()
 		local myAngles = ply:EyeAngles()
-		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 40)
-        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 40)
+		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 20)
+        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 20)
 		local myRotation = myAngles.y - 90
 		myRotation = math.rad(myRotation)
 		 theirX = theirX - (frame:GetWide() / 2)
@@ -1648,12 +1655,120 @@ local function radar()
      newX = newX + (frame:GetWide() / 2)
      newY = newY +  (frame:GetTall() / 2)
 	     
-      draw.RoundedBox(1,newX, newY,5,5,(Color(255,0,0)))
-	  
-		--surface.SetDrawColor(255, 0, 0 )
-	end
+      draw.RoundedBox(1,newX, newY,4,4,(Color(rnpc,gnpc,bnpc)))
+      end
+     end 
+     if (gBool("Visuals", "Filter", "Players")) then 
+	  for k, v in pairs(player.GetAll()) do
+	  	// colors
+        local pred = gInt("Colors", "Box - Enemy", "R");
+		local pgreen = gInt("Colors", "Box - Enemy", "G");
+		local bblue = gInt("Colors", "Box - Enemy", "B");
+	  	// colors
+		local ply = LocalPlayer()
+		local theirPos = v:GetPos()
+		local myPos = ply:GetPos()
+		local ply = LocalPlayer()
+		local myAngles = ply:EyeAngles()
+		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 20)
+        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 20)
+		local myRotation = myAngles.y - 90
+		myRotation = math.rad(myRotation)
+		 theirX = theirX - (frame:GetWide() / 2)
+         theirY = theirY - (frame:GetTall() / 2)
+		 local newX = theirX * math.cos(myRotation) - theirY * math.sin(myRotation)
+    local newY = theirX * math.sin(myRotation) + theirY * math.cos(myRotation)
+     newX = newX + (frame:GetWide() / 2)
+     newY = newY +  (frame:GetTall() / 2)
+	     
+      draw.RoundedBox(1,newX, newY,3,3,(Color(pred,pgreen,bblue)))
+end
 end
 
+      if (gBool("Visuals", "Filter", "Weapons")) then 
+	  for k, pweapon in pairs(ents.FindByClass("weapon_*")) do
+	  	if ( pweapon:GetOwner() == NULL ) then
+	  	// colors
+        local pweaponred = gInt("Colors", "Weapons", "R");
+		local pweapongreen = gInt("Colors", "Weapons", "G");
+		local pweaponblue = gInt("Colors", "Weapons", "B");
+	  	// colors
+		local ply = LocalPlayer()
+		local theirPos = pweapon:GetPos()
+		local myPos = ply:GetPos()
+		local ply = LocalPlayer()
+		local myAngles = ply:EyeAngles()
+		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 20)
+        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 20)
+		local myRotation = myAngles.y - 90
+		myRotation = math.rad(myRotation)
+		 theirX = theirX - (frame:GetWide() / 2)
+         theirY = theirY - (frame:GetTall() / 2)
+		 local newX = theirX * math.cos(myRotation) - theirY * math.sin(myRotation)
+    local newY = theirX * math.sin(myRotation) + theirY * math.cos(myRotation)
+     newX = newX + (frame:GetWide() / 2)
+     newY = newY +  (frame:GetTall() / 2)
+	     
+      draw.RoundedBox(1,newX, newY,4,4,(Color(pweaponred,pweapongreen,pweaponblue)))
+	end
+end
+	      if (gBool("Visuals", "Filter", "Weapons")) then 
+	  for k, pitem in pairs(ents.FindByClass("item_*")) do
+	 
+	  	// colors
+        local pitemred = gInt("Colors", "Items", "R");
+		local pitemgreen = gInt("Colors", "Items", "G");
+		local pitemblue = gInt("Colors", "Items", "B");
+	  	// colors
+		local ply = LocalPlayer()
+		local theirPos = pitem:GetPos()
+		local myPos = ply:GetPos()
+		local ply = LocalPlayer()
+		local myAngles = ply:EyeAngles()
+		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 20)
+        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 20)
+		local myRotation = myAngles.y - 90
+		myRotation = math.rad(myRotation)
+		 theirX = theirX - (frame:GetWide() / 2)
+         theirY = theirY - (frame:GetTall() / 2)
+		 local newX = theirX * math.cos(myRotation) - theirY * math.sin(myRotation)
+    local newY = theirX * math.sin(myRotation) + theirY * math.cos(myRotation)
+     newX = newX + (frame:GetWide() / 2)
+     newY = newY +  (frame:GetTall() / 2)
+	     
+      draw.RoundedBox(1,newX, newY,4,4,(Color(pitemred,pitemgreen,pitemblue)))
+
+end
+   end
+   	      if (gBool("Visuals", "Filter", "Dark rp")) then 
+	  for k, pdarkrp in pairs(ents.FindByClass("spawned_*")) do
+	 
+	  	// colors
+        local pitemred = gInt("Colors", "Items", "R");
+		local pitemgreen = gInt("Colors", "Items", "G");
+		local pitemblue = gInt("Colors", "Items", "B");
+	  	// colors
+		local ply = LocalPlayer()
+		local theirPos = pdarkrp:GetPos()
+		local myPos = ply:GetPos()
+		local ply = LocalPlayer()
+		local myAngles = ply:EyeAngles()
+		local theirX = (frame:GetWide() / 2) + ((theirPos.x - myPos.x) / 20)
+        local theirY = (frame:GetTall() / 2) + ((myPos.y - theirPos.y) / 20)
+		local myRotation = myAngles.y - 90
+		myRotation = math.rad(myRotation)
+		 theirX = theirX - (frame:GetWide() / 2)
+         theirY = theirY - (frame:GetTall() / 2)
+		 local newX = theirX * math.cos(myRotation) - theirY * math.sin(myRotation)
+    local newY = theirX * math.sin(myRotation) + theirY * math.cos(myRotation)
+     newX = newX + (frame:GetWide() / 2)
+     newY = newY +  (frame:GetTall() / 2)
+	     
+      draw.RoundedBox(1,newX, newY,4,4,(Color(pitemred,pitemgreen,pitemblue)))
+      end
+         end
+     end
+     end
 	frame.Think = function()
 		if (!gBool("Visuals", "Other", "Radar")) then 
 		
