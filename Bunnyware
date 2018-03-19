@@ -176,8 +176,8 @@ local options = {
 			
 			{"Chat Spam", "Selection", "Off", {"Off", "Slow", "Fast"}, 68},
 			{"Air Stuck", "Checkbox", false, 54},
-			{"Instant Unduck", "Checkbox", false, 54},
-			{"Instant Duck", "Checkbox", false, 54},
+			--{"Instant Unduck", "Checkbox", false, 54},
+			--{"Instant Duck", "Checkbox", false, 54},
 			
 		},
 		{
@@ -1702,18 +1702,22 @@ end
 timer.Create("SpamminsSlow", 1.3,0,spamslow)
 
 local function airstuck()
+if (GetConVar( "sv_cheats" ):GetBool() == true) then
 if(gOption("Misc", "Misc", "Air Stuck")) then
 RunConsoleCommand("net_fakeloss", "99")
 else if(!gOption("Misc", "Misc", "Air Stuck")) then
+	if (GetConVar( "sv_cheats" ):GetBool() == true) then
 	RunConsoleCommand("net_fakeloss", "0")	
 else return;
 end
 end
-
+end
+end
 end
 hook.Add( "Think", "astuvk", airstuck )
 
 local function viewmodelfov()
+	if(gOption("Misc", "Misc", "Air Stuck")) then
 	local fovdist = gBool("Visuals", "Other", "Viewmodel Fov");
 	--if(gOption("Misc", "Misc", "Viewmodel Fov Active")) then
 	if fovdist > 0 then
@@ -1725,7 +1729,7 @@ local function viewmodelfov()
 	end
 	if fovdist == 0 then
 	RunConsoleCommand("viewmodel_fov", 54)
-	
+	end
 end 
 end
 hook.Add( "Think", "vfov", viewmodelfov )
@@ -2757,22 +2761,22 @@ hook.Add("Think", "Speedhack", function()
 	end
 end)
 
-hook.Add("Think", "Instduck", function()
-	if(gBool("Misc","Misc","Instant Duck")) then
-	RunConsoleCommand("instantduckvar", "0.01")	
-	else if(!gBool("Misc","Misc","Instant Duck")) then
-		RunConsoleCommand("resetduckvar")
-	   end
-	end
-end)
-hook.Add("Think", "Instunduck", function()
-	if(gBool("Misc","Misc","Instant Unduck")) then
-	RunConsoleCommand("instantunduckvar", "0.01")	
-	else if(!gBool("Misc","Misc","Instant Unduck")) then
-		RunConsoleCommand("resetunduckvar")
-	   end
-	end
-end)
+-- hook.Add("Think", "Instduck", function()
+-- 	if(gBool("Misc","Misc","Instant Duck")) then
+-- 	RunConsoleCommand("instantduckvar", "0.01")	
+-- 	else if(!gBool("Misc","Misc","Instant Duck")) then
+-- 		RunConsoleCommand("resetduckvar")
+-- 	   end
+-- 	end
+-- end)
+-- hook.Add("Think", "Instunduck", function()
+-- 	if(gBool("Misc","Misc","Instant Unduck")) then
+-- 	RunConsoleCommand("instantunduckvar", "0.01")	
+-- 	else if(!gBool("Misc","Misc","Instant Unduck")) then
+-- 		RunConsoleCommand("resetunduckvar")
+-- 	   end
+-- 	end
+-- end)
 
 hook.Add("HUDPaint", "speed indicator", function()
 if(gBool("Visuals", "Other", "Speed Indicator")) then
@@ -3004,6 +3008,9 @@ end
 hook.Add("ScalePlayerDamage", "dmglogchat", dmglogchat)
 
 
+
+
+//
 local f2, f, htmlopen;
 local function htmlpage()
 	local frame = vgui.Create("DFrame");
@@ -3022,7 +3029,7 @@ html:OpenURL( "http://steamcommunity.com/id/droddie2/" )
 
 	frame.Think = function()
 		if (!gBool("Info", "BunnyWare Info Box", "My Steam ->")) then 
-		
+
 			frame:Remove();
 			htmlopen = false;
 			--candoslider = false;
@@ -3047,3 +3054,4 @@ local function htmlpagebrain()
 	end
 	end
 hook.Add("Think", "htmlpb", htmlpagebrain);
+//
