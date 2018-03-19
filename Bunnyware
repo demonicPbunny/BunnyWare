@@ -1585,16 +1585,15 @@ local function memee(ucmd)
 	Triggerbotnpc(ucmd);	
 	Triggerbot(ucmd);
 end
-hook.Add("CreateMove", "memmeme", memee)
-local function Bugfix(cmd)
-if(input.IsKeyDown(15)) then
+local function Bugfix(ucmd)
+if(ucmd:KeyDown(IN_USE)) then
 hook.Remove("CreateMove", "memmeme")
 end
-if(!input.IsKeyDown(15)) then
+if(!ucmd:KeyDown(IN_USE)) then
 hook.Add("CreateMove", "memmeme", memee)
 end
 end
-hook.Add("Think","PhysgunE", Bugfix)
+hook.Add("CreateMove","PhysgunE", Bugfix)
 local function bhoops(ucmd)
 
 bunnyhop(ucmd);
