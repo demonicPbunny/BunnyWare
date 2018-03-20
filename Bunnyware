@@ -1,7 +1,14 @@
 
 if SERVER then return; end
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Latest build can be find at https://github.com/demonicPbunny/BunnyWare/")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 20, 2018, 23:10 GMT+1")
+
+
+
 local type = type;
 local next = next;
+
 salty = {}
 local function Copy(tt, lt)
 	local copy = {}
