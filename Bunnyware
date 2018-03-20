@@ -54,24 +54,38 @@ surface.CreateFont("memeyou2", {
 local options = {
 	["LegitBot"] = {
 		{
-			{"Accuracy", 20, 20, 350, 240, 120},
-			{"Smooth", "Slider", 0, 60, 54},
+			{"Accuracy", 20, 20, 250, 140, 120},
+			{"Smooth", "Slider", 0, 25, 100},
+			{"Fov", "Slider", 0, 180, 100},
 			{"Anti Recoil", "Checkbox", false, 0},
 		},
 		{
-			{"Aimbot", 380, 20, 350, 190, 120},
+			{"Filter", 20, 180, 250, 140, 120},
+			{"Head", "Checkbox", false, 0},
+			{"Chest", "Checkbox", false, 0},
+			{"Pelvis", "Checkbox", false, 0},
+			{"Legs", "Checkbox", false, 0},
+			
+		},
+		{
+			{"Target Filter", 20, 330, 250, 140, 120},
+			{"NPC", "Checkbox", false, 0},
+			{"Players", "Checkbox", false, 0},
+
+		},
+		{
+			{"Aimbot", 275, 20, 250, 140, 120},
 			{"Enabled", "Checkbox", false, 0},
 			{"Auto Pistol", "Checkbox", false, 0},
-			{"Anti Spread", "Checkbox", false, 0},
-			{"Anti Recoil", "Checkbox", false, 0},
-		
+			{"Auto Fire", "Checkbox", false, 0},
+			{"Friendly Fire", "Checkbox", false, 0},
 	},
 	{
-		{"TriggerBot", 380, 230, 350, 50, 140},
+		{"TriggerBot", 275, 180, 250, 50, 140},
 		{"Enabled", "Checkbox", false, 0},	
     },
     	{
-		{"TriggerBot Filter", 380, 290, 350, 75, 140},
+		{"TriggerBot Filter", 275, 245, 250, 75, 140},
 		{"NPC", "Checkbox", false, 0},
 		{"Players", "Checkbox", false, 0},
 
@@ -116,8 +130,8 @@ local options = {
 		{
 			{"ESP", 20, 20, 250, 550, 120},
 			{"Enabled", "Checkbox", false, 0},
-			{"Box", "Checkbox", false, 0},
-			{"Box Type", "Selection", "2D Box", {"2D Box", "Edges"}, 100},
+			{"Classic ESP", "Checkbox", false, 0},
+			{"ESP Style", "Selection", "2D Box", {"2D Box", "Edges", "Circle"}, 100},
 			{"Name", "Checkbox", false, 0},
 			-- {"Health", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
@@ -142,7 +156,7 @@ local options = {
 
 			{"Weapons", "Checkbox", false, 0},
 			{"Items", "Checkbox", false, 0},
-			{"Dark rp", "Checkbox", false, 0},
+			{"Dark RP", "Checkbox", false, 0},
 			{"TTT", "Checkbox", false, 0},
 			{"Pulsar Effect", "Checkbox", false, 0},
 		},
@@ -208,7 +222,7 @@ local options = {
 			{"A", "Slider", 0, -7, 88},
 		},
 		{
-			{"Box - Enemy", 20, 205, 250, 175, 130},
+			{"Players", 20, 205, 250, 175, 130},
 			{"R", "Slider", 255, 255, 88},
 			{"G", "Slider", 0, 255, 88},
 			{"B", "Slider", 0, 255, 88},
@@ -348,10 +362,10 @@ local options = {
 	["Info"] = {
 		{
 			{"BunnyWare Info Box", 20, 20, 350, 240, 100},
-            {"Latest Update: 2018-03-19 5:33 PM GMT+1", "Checkbox", false, 0},
+            {"Latest Update: 2018-03-19 4:00 PM GMT+1", "Checkbox", false, 0},
 			{"My Steam ->", "Checkbox", false, 0, 54},
 			
-			--{"Box Type", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
+			--{"ESP Style", "Selection", "2D Box", {"2D Box", "3D Box"}, 100},
 		},
 		},
 };
@@ -1055,9 +1069,9 @@ local function GetColor(v)
 		local b = gInt("Colors", "Glow", "B");
 		return(Color(r, g, b, 220));
 	end
-	local r = gInt("Colors", "Box - Enemy", "R");
-	local g = gInt("Colors", "Box - Enemy", "G");
-	local b = gInt("Colors", "Box - Enemy", "B");
+	local r = gInt("Colors", "Players", "R");
+	local g = gInt("Colors", "Players", "G");
+	local b = gInt("Colors", "Players", "B");
 	return(Color(r, g, b, 220));
 end
 function GetAmmoForCurrentWeapon( pm )
@@ -1074,7 +1088,7 @@ local function ESP(v)
 	local pos, pos2 = vm.ToScreen(pos - Vector(0, 0, 5)), vm.ToScreen( pos + Vector(0, 0, 70 ) );
 	local h = pos.y - pos2.y;
 	local w = h / 2.2;
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 		
 		surface.SetDrawColor(GetColor(v));
 		surface.DrawOutlinedRect( pos.x - w / 2, pos.y - h, w, h);
@@ -1140,7 +1154,7 @@ end
 local aimtarget;
 local Name = ""
 hook.Add("HUDPaint", "", function()
-if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 for k,v in pairs ( ents.GetAll() ) do
  
 		local Position = ( v:GetPos() + Vector( 0,0,80 ) ):ToScreen()
@@ -1578,22 +1592,32 @@ end
 
 
 local function memee(ucmd)
-	meme(ucmd);
-	aimer(ucmd);
-	antiaimer(ucmd);
 	salty.edgejump(ucmd);
 	Triggerbotnpc(ucmd);	
 	Triggerbot(ucmd);
-	
+
+
 end
 hook.Add("CreateMove", "memmeme", memee)
+local function meeeme(ucmd)
+	meme(ucmd);	 
+	 aimer(ucmd);
+	antiaimer(ucmd);
+	
+
+end	
+hook.Add("CreateMove", "meeeme", meeeme)
+
+
+
+		
 
 local function Bugfix(ucmd)
-if(ucmd:KeyDown(IN_USE)) then
-hook.Remove("CreateMove", "memmeme")
+if(ucmd:KeyDown(IN_USE))  then
+hook.Remove("CreateMove", "meeeme")
 end
 if(!ucmd:KeyDown(IN_USE)) then
-hook.Add("CreateMove", "memmeme", memee)
+hook.Add("CreateMove", "meeeme", meeeme)
 end
 end
 hook.Add("CreateMove","PhysgunE", Bugfix)
@@ -1814,9 +1838,9 @@ end
      if (gBool("Visuals", "Filter", "Players")) then 
 	  for k, v in pairs(player.GetAll()) do
 	  	// colors
-        local pred = gInt("Colors", "Box - Enemy", "R");
-		local pgreen = gInt("Colors", "Box - Enemy", "G");
-		local bblue = gInt("Colors", "Box - Enemy", "B");
+        local pred = gInt("Colors", "Players", "R");
+		local pgreen = gInt("Colors", "Players", "G");
+		local bblue = gInt("Colors", "Players", "B");
 	  	// colors
 		local ply = LocalPlayer()
 		local theirPos = v:GetPos()
@@ -1893,7 +1917,7 @@ end
 
 end
    end
-   	      if (gBool("Visuals", "Filter", "Dark rp")) then 
+   	      if (gBool("Visuals", "Filter", "Dark RP")) then 
 	  for k, pdarkrp in pairs(ents.FindByClass("spawned_*")) do
 	 
 	  	// colors
@@ -2058,8 +2082,8 @@ local function Get2DBounds(v)
 end
 
 hook.Add("HUDPaint", "gunlabbox", function()
-if(gBool("Visuals", "Filter", "Dark rp")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("gunlab*")) do
 		--print("func works")
 		
@@ -2078,7 +2102,7 @@ end
 end
 end )
 hook.Add("HUDPaint", "gunlabname", function()
-		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark rp")) then
+		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("gunlab")) do
 		local enemyPos = v:GetPos(v)
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
@@ -2093,8 +2117,8 @@ end
 end
 end)
 hook.Add("HUDPaint", "moneyprinterbox", function()
-if(gBool("Visuals", "Filter", "Dark rp")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("money_printer")) do
 		--print("func works")
 	
@@ -2111,8 +2135,8 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 	end
 end
 end
-if(gBool("Visuals", "Filter", "Dark rp")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges") then	
 	for k, v in pairs(ents.FindByClass("money_printer")) do
 		--print("func works")
 	
@@ -2138,7 +2162,7 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 end )
 
 hook.Add("HUDPaint", "moneyprintername", function()
-		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark rp")) then
+		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("money_printer")) do
 		local enemyPos = v:GetPos(v)
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
@@ -2153,8 +2177,8 @@ end
 end
 end)
 hook.Add("HUDPaint", "darkrpspawnedbox", function()
-if(gBool("Visuals", "Filter", "Dark rp")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("spawned_*")) do
 
 		    local r = gInt("Colors", "Items", "R");
@@ -2169,8 +2193,8 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
 	end
 end
 end
-if(gBool("Visuals", "Filter", "Dark rp")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges") then	
 	for k, v in pairs(ents.FindByClass("spawned_*")) do
 
 		    local r = gInt("Colors", "Items", "R");
@@ -2194,7 +2218,7 @@ if(gBool("Visuals", "Filter", "Dark rp")) then
             end
 end )
 hook.Add("HUDPaint", "darkrpspawnedname", function()
-		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark rp")) then
+		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("spawned_*")) do
 		local enemyPos = v:GetPos(v)
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
@@ -2210,7 +2234,7 @@ end
 end)
 hook.Add("HUDPaint", "Weaponbox", function()
 if(gBool("Visuals", "Filter", "Weapons")) then
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box") then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
 	for k, v in pairs(ents.FindByClass("weapon_*")) do
 		
            if ( v:GetOwner() == NULL ) then
@@ -2228,7 +2252,7 @@ end
          end
              end
 if(gBool("Visuals", "Filter", "Weapons")) then
-if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges") then	
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges") then	
 		for k, v in pairs(ents.FindByClass("weapon_*")) do
 		
            if ( v:GetOwner() == NULL ) then
@@ -2289,7 +2313,7 @@ end
 end)
 
 hook.Add("HUDPaint", "itembox", function()
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box" && gBool("Visuals", "Filter", "Items")) then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box" && gBool("Visuals", "Filter", "Items")) then	
 	for k, v in pairs(ents.FindByClass("item_*")) do
 
 		    local r = gInt("Colors", "Items", "R");
@@ -2304,7 +2328,7 @@ hook.Add("HUDPaint", "itembox", function()
 	
 end
 end
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges" && gBool("Visuals", "Filter", "Items")) then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges" && gBool("Visuals", "Filter", "Items")) then	
 	for k, v in pairs(ents.FindByClass("item_*")) do
 
 		    local r = gInt("Colors", "Items", "R");
@@ -2329,7 +2353,7 @@ end
 end )
 
 hook.Add("HUDPaint", "npcbox", function()
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "2D Box" && gBool("Visuals", "Filter", "NPC")) then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box" && gBool("Visuals", "Filter", "NPC")) then	
 	for k, v in pairs(ents.FindByClass("npc_*")) do
 
 		    local r = gInt("Colors", "NPC", "R");
@@ -2344,7 +2368,7 @@ hook.Add("HUDPaint", "npcbox", function()
 	
 end
 end
-	if(gBool("Visuals", "ESP", "Box") && gOption("Visuals", "ESP", "Box Type") == "Edges" && gBool("Visuals", "Filter", "NPC")) then	
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges" && gBool("Visuals", "Filter", "NPC")) then	
 	for k, v in pairs(ents.FindByClass("npc_*")) do
 
 		    local r = gInt("Colors", "NPC", "R");
@@ -2910,7 +2934,7 @@ end
 end)
 
 hook.Add("HUDPaint", "wiremodelsdarkrp", function()
-if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Dark rp")) then
+if(gBool("Visuals", "ESP", "Wire Models") && gBool("Visuals", "Filter", "Dark RP")) then
 for k,v in pairs(ents.FindByClass("spawned_*")) do
 if ( v:GetOwner() == NULL ) then	
 		local r = gInt("Colors", "Items", "R");
@@ -2922,7 +2946,7 @@ v:SetMaterial("models/wireframe")
 v:SetColor(Color(r,g,b, 255))
 end
 end
-else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Dark rp")) then
+else if(!gBool("Visuals", "ESP", "Wire Models") or !gBool("Visuals", "Filter", "Dark RP")) then
 
 	for k,v in pairs(ents.FindByClass("spawned_*")) do
 		
@@ -2999,6 +3023,148 @@ chat.PlaySound()
 end	
 end
 hook.Add("ScalePlayerDamage", "dmglogchat", dmglogchat)
+
+local function circlespnpc()
+	if(gBool("Visuals", "Filter", "NPC")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(ents.FindByClass("npc_*")) do
+		local r = gInt("Colors", "NPC", "R");
+		local g = gInt("Colors", "NPC", "G");
+		local b = gInt("Colors", "NPC", "B");
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+hook.Add("HUDPaint", "circleespnpc",circlespnpc)
+
+local function circleespitem()
+    if(gBool("Visuals", "Filter", "Items")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(ents.FindByClass("item_*")) do
+		local r = gInt("Colors", "Items", "R");
+		local g = gInt("Colors", "Items", "G");
+		local b = gInt("Colors", "Items", "B");
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+hook.Add("HUDPaint", "circleespitem",circleespitem)
+
+local function circleespwep()
+    if(gBool("Visuals", "Filter", "Weapons")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(ents.FindByClass("weapon_*")) do
+		local r = gInt("Colors", "Weapons", "R");
+		local g = gInt("Colors", "Weapons", "G");
+		local b = gInt("Colors", "Weapons", "B");
+if ( v:GetOwner() == NULL ) then
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+            end
+hook.Add("HUDPaint", "circleespwep",circleespwep)
+
+local function circleespply()
+    if(gBool("Visuals", "Filter", "Players")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(player.GetAll()) do
+		local r = gInt("Colors", "Players", "R");
+		local g = gInt("Colors", "Players", "G");
+		local b = gInt("Colors", "Players", "B");
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+hook.Add("HUDPaint", "circleespply",circleespply)
+
+local function circleespdarkrp()
+    if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(ents.FindByClass("spawned_*")) do
+		local r = gInt("Colors", "Players", "R");
+		local g = gInt("Colors", "Players", "G");
+		local b = gInt("Colors", "Players", "B");
+if ( v:GetOwner() == NULL ) then
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+            end
+hook.Add("HUDPaint", "circleespdarkrp",circleespdarkrp)
+
+local function circleespdarkrp2()
+    if(gBool("Visuals", "Filter", "Dark RP")) then
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
+for k, v in pairs(ents.FindByClass("money_printer")) do
+		local r = gInt("Colors", "Items", "R");
+		local g = gInt("Colors", "Items", "G");
+		local b = gInt("Colors", "Items", "B");
+local vec = v:WorldSpaceCenter():ToScreen()
+local scale = v:GetModelRadius()
+surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
+end    
+   end
+      end
+         end
+hook.Add("HUDPaint", "circleespdarkrp2",circleespdarkrp2)
+
+
+-- local function gethead(ent)
+--         if ent:LookupBone("ValveBiped.Bip01_Head1") then
+--         local pos = ent:GetBonePosition(ent:GetHitBoxBone(0, 0))
+--                 return pos
+--         end
+--         return ent:LocalToWorld(ent:OBBCenter())
+-- end
+ 
+-- local function Legitaimbot(ucmd)
+--         local myang = LocalPlayer():GetAngles()
+--         local fovvalue = gBool("LegitBot", "Accuracy", "Smooth");
+--         if(gBool("LegitBot", "Aimbot", "Enabled")) then
+--         if input.IsMouseDown(MOUSE_LEFT) then
+--                 local ply = LocalPlayer()
+--                 local target = nil;
+--                 for k, ent in next, player.GetAll() do
+--                         if (!IsValid(ent) || ent:GetFriendStatus() == "friend" || ent:InVehicle() || ent == LocalPlayer() || !ent:Alive() || ent:IsNPC() || ent:Team() == TEAM_SPECTATOR) then
+--                                 continue
+--                         end
+ 
+--                         local ang = (ent:GetPos() - LocalPlayer():GetPos()):Angle()
+--                         local angdiffy = math.abs(math.NormalizeAngle(myang.y - ang.y ))
+--                         local angdiffp = math.abs(math.NormalizeAngle(myang.p - ang.p ))
+               
+--                         if (angdiffy < 55 and angdiffp < 55) then
+--                                 target = ent
+--                         end
+--                 end
+--                 if (target != nil) then
+--                         local angle = (gethead(target) - LocalPlayer():GetShootPos()):Angle()
+--                         angle.p = math.NormalizeAngle(angle.p)
+--                         angle.y = math.NormalizeAngle(angle.y)
+--                         ucmd:SetViewAngles(Lerp(0.05, ucmd:GetViewAngles(), angle))
+--                 end
+--         end
+-- end  
+-- end
+ 
+-- hook.Add("CreateMove", "bot5", Legitaimbot)
+
 
 
 
