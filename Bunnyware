@@ -2,7 +2,7 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 02:12 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 02:17 GMT+1")
 
 
 
@@ -473,7 +473,7 @@ local function DrawBackground(w, h)
 	local bb = gInt("Gui", "Background", "B");
 	surface.SetDrawColor(rb, gb, bb);
 	--surface.DrawRect(4, 31, w-7, h-35);
-	draw.RoundedBox( 2, 4, 31, w-7, h-35, Color(255, 255, 255, 255) )
+	draw.RoundedBox( 2, 4, 31, w-7, h-35, Color(rb, gb, bb, 255) )
 	local r = gInt("Gui", "Border", "R");
 	local g = gInt("Gui", "Border", "G");
 	local b = gInt("Gui", "Border", "B");
