@@ -2,7 +2,7 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 21:42 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 21:53 GMT+1")
 
 
 
@@ -2577,6 +2577,7 @@ hook.Add("HUDPaint", "plyweapon", function()
 		local h = enemyPos.y - penemy.y;
 		local w = h / 2.2;
 		surface.SetTextColor( 255, 255, 255, 255 )
+		if (v:GetActiveWeapon():GetClass() == Null) then continue end
 		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass());
 		surface.SetDrawColor(255,255,255,255)
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
@@ -3130,13 +3131,13 @@ end)
 hook.Add("PostDrawOpaqueRenderables", "pbarrel", function()
 	if(gBool("Visuals", "ESP", "Barrel") && gBool("Visuals", "Filter", "Players")) then
 for k,v in pairs(player.GetAll()) do
-  if IsValid(!LocalPlayer()) then
+  if v == LocalPlayer() then continue end
 	local startpos = v:EyePos()
 	local endpos = v:EyePos() + v:EyeAngles():Forward() * 10000
    
 	render.SetMaterial( Laser )
 	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( 255, 255, 255, 255 ) ) 
-          end  
+            
        end
     end
 end)
