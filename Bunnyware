@@ -2,7 +2,7 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 02:17 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 03:02 GMT+1")
 
 
 
@@ -938,7 +938,7 @@ local function menu()
 		DrawSub(self, w, h);
 		DrawSaveButton(self, w, h);
 		DrawLoadButton(self, w, h);
-		Drawcheatsbutton(self, w, h);
+	--	Drawcheatsbutton(self, w, h);
 		if(drawlast) then
 			drawlast();
 			candoslider = true;
@@ -1782,7 +1782,42 @@ end
 end
 hook.Add( "Think", "wfov", viewfov) 
 
-
+local function radarbackground(w, h)
+	local rb = gInt("Gui", "Background", "R");
+	local gb = gInt("Gui", "Background", "G");
+	local bb = gInt("Gui", "Background", "B");
+	surface.SetDrawColor(rb, gb, bb);
+	--surface.DrawRect(4, 31, w-7, h-35);
+	--draw.RoundedBox( 2, 4, 31, w-7, h-35, Color(rb, gb, bb, 255) )
+	local r = gInt("Gui", "Border", "R");
+	local g = gInt("Gui", "Border", "G");
+	local b = gInt("Gui", "Border", "B");
+	local curcol = Color(r, g, b, 150);
+	local border = Color(r, g, b, 25);
+	for i = 0, 30 do
+		surface.SetDrawColor(curcol);
+		--curcol.r = curcol.r - 1;
+		--surface.DrawLine(0, i, w, i);
+        draw.RoundedBox( 9, i-25, i-35, w, 35, border )
+	end
+	
+	surface.SetDrawColor(curcol);
+	
+	surface.SetFont("CenterPrintText");
+	
+	local tw, th = surface.GetTextSize("Radar");
+	
+	surface.SetTextPos(5, 15 - th / 2);
+	
+	surface.SetTextColor(255, 255, 255);
+	--draw.RoundedBox(number cornerRadius,number x,number y,number width,number height,table color)
+	surface.DrawText("Radar");
+	draw.RoundedBox(20, 0, 2, 5, h, curcol ) -- surface.DrawRect(0, 31, 5, h - 31);
+	draw.RoundedBox(20, -3, h - 5, w + 7, h, curcol ) -- surface.DrawRect(0, h - 5, w, h);
+	draw.RoundedBox(20, w - 5, 2, 5, h, curcol ) --surface.DrawRect(w - 5, 31, 5, h);
+	
+	
+end
 
 
 local failsafe2, failsafe, radaropen;
@@ -1798,10 +1833,11 @@ local function radar()
 	--frame:MakePopup();
 	frame:ShowCloseButton(false);
 	
-	frame.PaintOver = function()
+	frame.PaintOver = function(self, w, h)
     local center = Vector( frame:GetTall() / 2, frame:GetWide() / 2, 0 )
 	local scale = Vector( 50, 50, 0 )
 	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	radarbackground(w, h);
 	function frame:OnMousePressed()
 	if self.m_bSizable and gui.MouseX() > ( self.x + self:GetWide() - 20 ) and gui.MouseY() > ( self.y + self:GetTall() - 20 ) then
 		self.Sizing = { gui.MouseX() - self:GetWide(), gui.MouseY() - self:GetTall() }
@@ -1816,7 +1852,7 @@ local function radar()
 end
 	surface.SetDrawColor( 255, 0, 0, 255 )
 
-	    surface.DrawLine(frame:GetWide()/1.94, (frame:GetTall()/2)-65, frame:GetWide()/1.94, (frame:GetTall()/2)+90)
+	    surface.DrawLine(frame:GetWide()/1.94, (frame:GetTall()/2)-250, frame:GetWide()/1.94, (frame:GetTall()/2)+260)
 		surface.DrawLine((frame:GetWide()/2)-250, frame:GetTall()/1.94, (frame:GetWide()/2)+260, frame:GetTall()/1.94)
         if (gBool("Visuals", "Filter", "NPC")) then 
 		for k, pnpc in pairs(ents.FindByClass("npc_*")) do
