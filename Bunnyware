@@ -2,7 +2,7 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018,  22:43 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 23:44 GMT+1")
 
 
 local type = type;
@@ -1928,7 +1928,7 @@ end
       draw.RoundedBox(1,newX, newY,4,4,(Color(pweaponred,pweapongreen,pweaponblue)))
 	end
 end
-	      if (gBool("Visuals", "Filter", "Weapons")) then 
+	      if (gBool("Visuals", "Filter", "Items")) then 
 	  for k, pitem in pairs(ents.FindByClass("item_*")) do
 	 
 	  	// colors
