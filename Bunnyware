@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:21 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Added Aim on Mouse 1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:36 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Disabled Offline Features")
 local type = type;
 local next = next;
 
@@ -3172,7 +3172,7 @@ hook.Add("Think", "Health", function()
 	local healthvalue = gBool("Misc","Other","Set Health ");
 	if(gBool("Misc","Other","God mode")) then
 		if tonumber(healthvalue) > 0 then 
-		RunConsoleCommand("Healthvar", tonumber(healthvalue))
+		--RunConsoleCommand("Healthvar", tonumber(healthvalue))
 	   end
 	end
 end)
@@ -3181,7 +3181,7 @@ hook.Add("Think", "Armor", function()
 	if(gBool("Misc","Other","God mode")) then
 	local ArmorValue = gBool("Misc","Other","Set Armor ");
 	if tonumber(ArmorValue) > 0 then 	
-	RunConsoleCommand("Armorvar", tonumber(ArmorValue))	
+	--RunConsoleCommand("Armorvar", tonumber(ArmorValue))	
 	   end
 	end
 end)
@@ -3191,9 +3191,9 @@ hook.Add("Think", "Speedhack", function()
 		local pfactor = gBool("Misc","SpeedHack","Factor ");
 	
 	if tonumber(pfactor) > 0 then
-	RunConsoleCommand("Speedhackvar", tonumber(pfactor) * 1000)	
+	--RunConsoleCommand("Speedhackvar", tonumber(pfactor) * 1000)	
 	else if tonumber(pfactor) < 1 then
-		RunConsoleCommand("resetspeedvar")
+		--RunConsoleCommand("resetspeedvar")
 	end
 	   end
 	end
