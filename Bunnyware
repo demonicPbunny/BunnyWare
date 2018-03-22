@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 16:32 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [ESP] Barrel Tweak, Color now works")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:03 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Aimbot now working")
 local type = type;
 local next = next;
 
@@ -61,7 +61,7 @@ local options = {
 		{
 			{"Accuracy", 20, 20, 250, 140, 120},
 			{"Smooth", "Slider", 0, 25, 100},
-			{"Fov", "Slider", 0, 180, 100},
+			{"Fov", "Slider", 0, 25, 100},
 			{"Anti Recoil", "Checkbox", false, 0},
 		},
 		{
@@ -1551,18 +1551,22 @@ local function rapidfire(ucmd)
 end
 
 local function meme(ucmd)
+	--if(gBool("LegitBot", "Aimbot", "Enabled")) then
 	if(!fa) then fa = cm.GetViewAngles(ucmd); end
 	fa = fa + Angle(cm.GetMouseY(ucmd) * .023, cm.GetMouseX(ucmd) * -.023, 0);
 	NormalizeAngle(fa);
-	if(cm.CommandNumber(ucmd) == 0) then
+	if(cm.CommandNumber(ucmd) == 0 && gBool("Ragebot", "Aimbot", "Silent") or ucmd:KeyDown(IN_USE)) then
+
 		cm.SetViewAngles(ucmd, GetAngle(fa));
+
 		return;
-	end
+--end
 
 	--if(cm.KeyDown(ucmd, 2) && !em.IsOnGround(me)) then
 	--	cm.SetButtons(ucmd, bit.band( cm.GetButtons(ucmd), bit.bnot( 2 ) ) );
-	--end
+	end
 end
+
 
 local function Triggerbotnpc(ucmd)
 	if(gBool("LegitBot", "TriggerBot", "Enabled") && gBool("LegitBot", "TriggerBot Filter", "NPC")) then 
@@ -1616,9 +1620,109 @@ end
 end
 end
 
+local function gethead(ent)
+
+        if ent:LookupBone("ValveBiped.Bip01_Head1") then
+
+        if (gBool("LegitBot", "Filter", "Head")) then
+        local pos = ent:GetBonePosition(ent:GetHitBoxBone(0, 0)) --first one is hitbox bone id. second one is always zero
+                return pos
+        end
+        elseif (gBool("LegitBot", "Filter", "Chest")) then
+        local pos = ent:GetBonePosition(ent:GetHitBoxBone(16, 0)) --first one is hitbox bone id. second one is always zero
+                return pos
+        end
+    if (gBool("LegitBot", "Filter", "Pelvis")) then
+        local pos = ent:GetBonePosition(ent:GetHitBoxBone(15, 0)) --first one is hitbox bone id. second one is always zero
+                return pos
+        end
+     if (gBool("LegitBot", "Filter", "Legs")) then
+        local pos = ent:GetBonePosition(ent:GetHitBoxBone(12, 0)) --first one is hitbox bone id. second one is always zero
+                return pos
+       end
+           
+        return ent:LocalToWorld(ent:OBBCenter())
+
+end
+local function aimer2(ucmd)
+	if (gBool("LegitBot", "Target Filter", "Players") && !gBool("LegitBot", "Target Filter", "NPC")) then
+	if(cm.CommandNumber(ucmd) == 0 || !gBool("LegitBot", "Aimbot", "Enabled")) then return end;
+	gettarget();
+	aa = false;
+	local aimfov = (gBool("LegitBot", "Accuracy", "Fov"))
+	local smooth = (gBool("LegitBot", "Accuracy", "Smooth"))
+   -- print(aimfov)
+
+	if(aimtarget && WeaponCanFire() && WeaponShootable() && input.IsMouseDown(MOUSE_LEFT) ) then
+		aa = true;
+		local myang = LocalPlayer():GetAngles()
+                local ply = LocalPlayer()
+                local target = nil;
+                for k, ent in next, player.GetAll() do
+                if ent == LocalPlayer() then continue end;
+                        local ang = (ent:GetPos() - LocalPlayer():GetPos()):Angle()
+                        local angdiffy = math.abs(math.NormalizeAngle(myang.y - ang.y ))
+                        local angdiffp = math.abs(math.NormalizeAngle(myang.p - ang.p ))
+               
+                        if (angdiffy < aimfov and angdiffp < aimfov) then
+                                target = ent
+
+                        end
+                end
+                if (target != nil) then
+                        local angle = (gethead(target) - LocalPlayer():GetShootPos()):Angle()
+                        angle.p = math.NormalizeAngle(angle.p)
+                        angle.y = math.NormalizeAngle(angle.y)
+
+                       ucmd:SetViewAngles(Lerp(smooth/100, ucmd:GetViewAngles(), angle))
+fa = ang;
+end
+end
+end
+end
+
+local function aimer3(ucmd)
+		if (gBool("LegitBot", "Target Filter", "NPC") && !gBool("LegitBot", "Target Filter", "Players")) then
+	if(cm.CommandNumber(ucmd) == 0 || !gBool("LegitBot", "Aimbot", "Enabled")) then return end;
+	gettarget();
+	aa = false;
+	local aimfov = (gBool("LegitBot", "Accuracy", "Fov"))
+	local smooth = (gBool("LegitBot", "Accuracy", "Smooth"))
+   -- print(aimfov)
+
+	if(aimtarget && WeaponCanFire() && WeaponShootable() && input.IsMouseDown(MOUSE_LEFT) ) then
+		aa = true;
+		local myang = LocalPlayer():GetAngles()
+                local ply = LocalPlayer()
+                local target = nil;
+                for k, ent in next, ents.FindByClass("npc_*") do
+                if ent == LocalPlayer() then continue end;
+                        local ang = (ent:GetPos() - LocalPlayer():GetPos()):Angle()
+                        local angdiffy = math.abs(math.NormalizeAngle(myang.y - ang.y ))
+                        local angdiffp = math.abs(math.NormalizeAngle(myang.p - ang.p ))
+               
+                        if (angdiffy < aimfov and angdiffp < aimfov) then
+                                target = ent
+
+                        end
+                end
+                if (target != nil) then
+                        local angle = (gethead(target) - LocalPlayer():GetShootPos()):Angle()
+                        angle.p = math.NormalizeAngle(angle.p)
+                        angle.y = math.NormalizeAngle(angle.y)
+
+                       ucmd:SetViewAngles(Lerp(smooth/100, ucmd:GetViewAngles(), angle))
+fa = ang;
+end
+end
+end
+end
+
 local function memee(ucmd)
 	meme(ucmd);
 	aimer(ucmd);
+	aimer2(ucmd);
+	aimer3(ucmd);
 	antiaimer(ucmd);
 	salty.edgejump(ucmd);
 	Triggerbotnpc(ucmd);	
