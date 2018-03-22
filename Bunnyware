@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:03 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Aimbot now working")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:13 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Added Fov Range Cirlce")
 local type = type;
 local next = next;
 
@@ -63,6 +63,7 @@ local options = {
 			{"Smooth", "Slider", 0, 25, 100},
 			{"Fov", "Slider", 0, 25, 100},
 			{"Anti Recoil", "Checkbox", false, 0},
+			{"Fov Range Visual", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 20, 180, 250, 140, 120},
@@ -2134,7 +2135,13 @@ local function radarbrain()
 
 hook.Add("Think", "radar", radarbrain);
 
-
+hook.Add("HUDPaint", "Fovcrosshair", function()
+if (gOption("LegitBot", "Accuracy", "Fov Range Visual")) then
+	local fovrange = (gBool("LegitBot", "Accuracy", "Fov"))
+surface.SetDrawColor(Color(255, 0, 0, 255))
+surface.DrawCircle(ScrW()/2, ScrH()/2,fovrange*9.25,Color(255, 0, 0, 255))
+end
+end)
 hook.Add("HUDPaint", "crosshairp1", function()
   if (gOption("Visuals", "Other", "Crosshair") == "Old") then
 				surface.SetDrawColor(Color(255, 0, 0, 255))
@@ -3545,6 +3552,9 @@ end
       end
          end
 hook.Add("HUDPaint", "circleespdarkrp2",circleespdarkrp2)
+
+
+
 
 
 -- local function gethead(ent)
