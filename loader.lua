@@ -1,14 +1,17 @@
 
 local function DrawBackground(w, h)
+
 	surface.SetDrawColor(255, 255, 255);
-	surface.DrawRect(0, 0, w, h);
-	
-	local curcol = Color(182, 0, 0);
-	
+	--surface.DrawRect(4, 31, w-7, h-35);
+	draw.RoundedBox( 2, 4, 31, w-7, h-35, Color(255, 255, 255, 255) )
+
+	local curcol = Color(255, 0, 0, 150);
+	local border = Color(255, 0, 0, 25);
 	for i = 0, 30 do
 		surface.SetDrawColor(curcol);
-		curcol.r = curcol.r - 1;
-		surface.DrawLine(0, i, w, i);
+		--curcol.r = curcol.r - 1;
+		--surface.DrawLine(0, i, w, i);
+        draw.RoundedBox( 9, i-25, i-25, w, 35, border)
 	end
 	
 	surface.SetDrawColor(curcol);
@@ -22,11 +25,13 @@ local function DrawBackground(w, h)
 	surface.SetTextColor(255, 255, 255);
 	
 	surface.DrawText("BunnyWare Loader");
+	draw.RoundedBox(20, 0, 31, 5, h - 31, curcol ) -- surface.DrawRect(0, 31, 5, h - 31);
+	draw.RoundedBox(20, 0, h - 5, w, h, curcol ) -- surface.DrawRect(0, h - 5, w, h);
+	draw.RoundedBox(20, w - 5, 31, 5, h, curcol ) --surface.DrawRect(w - 5, 31, 5, h);
 	
-	surface.DrawRect(0, 31, 5, h - 31);
-	surface.DrawRect(0, h - 5, w, h);
-	surface.DrawRect(w - 5, 31, 5, h);
+	
 end
+
 local fetcher = {}
 
 function fetcher.Get( url )
