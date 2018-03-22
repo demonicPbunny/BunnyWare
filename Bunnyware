@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:13 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Added Fov Range Cirlce")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:21 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] Added Aim on Mouse 1")
 local type = type;
 local next = next;
 
@@ -82,9 +82,11 @@ local options = {
 		{
 			{"Aimbot", 275, 20, 250, 140, 120},
 			{"Enabled", "Checkbox", false, 0},
-			{"Auto Pistol", "Checkbox", false, 0},
-			{"Auto Fire", "Checkbox", false, 0},
-			{"Friendly Fire", "Checkbox", false, 0},
+			--{"Auto Pistol", "Checkbox", false, 0},
+			--{"Auto Fire", "Checkbox", false, 0},
+			--{"Friendly Fire", "Checkbox", false, 0},
+            {"Aim On Mouse 1", "Checkbox", false, 0},
+
 	},
 	{
 		{"TriggerBot", 275, 180, 250, 50, 140},
@@ -1654,7 +1656,7 @@ local function aimer2(ucmd)
 	local smooth = (gBool("LegitBot", "Accuracy", "Smooth"))
    -- print(aimfov)
 
-	if(aimtarget && WeaponCanFire() && WeaponShootable() && input.IsMouseDown(MOUSE_LEFT) ) then
+	if(aimtarget && WeaponCanFire() && WeaponShootable() && input.IsMouseDown(MOUSE_LEFT) or aimtarget && WeaponCanFire() && WeaponShootable() && !gBool("LegitBot", "Aimbot", "Aim On Mouse 1")) then
 		aa = true;
 		local myang = LocalPlayer():GetAngles()
                 local ply = LocalPlayer()
