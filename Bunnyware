@@ -2,7 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 21, 2018, 23:44 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 14:59 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] TriggerBot now have Filters Working ")
 
 
 local type = type;
@@ -1593,11 +1594,26 @@ if (pweapon ~= "weapon_crowbar" && pweapon ~= "gmod_tool"
  && pweapon ~= "weapon_physcannon" && pweapon ~= "weapon_frag" && pweapon ~= "weapon_slam"
  && pweapon ~= "laserpointer" && pweapon ~= "laserpointer"
  && pweapon ~= "laserpointer" ) then
-if ply:GetEyeTrace().Entity:IsPlayer() then
+local trace = LocalPlayer():GetEyeTrace()
+--if trace.HitWorld == false then continue end
+if ply:GetEyeTrace().Entity:IsPlayer() && trace.HitWorld == false && gBool("LegitBot", "Filter", "Head") && trace.HitBox == 0 then
 cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
 	else
 cm.SetButtons(ucmd, bit.band( cm.GetButtons(ucmd), bit.bnot( 1 ) ) );
 	end
+if ply:GetEyeTrace().Entity:IsPlayer() && trace.HitWorld == false && gBool("LegitBot", "Filter", "Chest") && trace.HitBox == 16 then
+	cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
+
+	end
+if ply:GetEyeTrace().Entity:IsPlayer() && trace.HitWorld == false && gBool("LegitBot", "Filter", "Pelvis") && trace.HitBox == 15 then
+	cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
+
+	end			                                                                                                                 //&& trace.HitBox == 10 && trace.HitBox == 8 && trace.HitBox == 7 && trace.HitBox == 11 && trace.HitBox == 12  
+	if ply:GetEyeTrace().Entity:IsPlayer() && trace.HitWorld == false && gBool("LegitBot", "Filter", "Legs") then
+	if trace.HitBox == 14 or trace.HitBox == 10 or trace.HitBox == 8 or trace.HitBox == 7 or trace.HitBox == 11 or trace.HitBox == 12   then
+	cm.SetButtons(ucmd, bit.bor( cm.GetButtons(ucmd), 1 ) );
+end
+end
 end
 end
 end
