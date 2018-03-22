@@ -2,10 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 14:59 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [LegitBot] TriggerBot now have Filters Working ")
-
-
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 16:32 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [ESP] Barrel Tweak, Color now works")
 local type = type;
 local next = next;
 
@@ -3118,7 +3116,7 @@ local pspeed = math.Round(speed)
 
 
 end) 
-local Laser = Material( "cable/redlaser" )
+local Laser = Material( "trails/laser" )
 hook.Add("PostDrawOpaqueRenderables", "npcbarrel", function()
 if(gBool("Visuals", "ESP", "Barrel") && gBool("Visuals", "Filter", "NPC")) then
 
@@ -3126,9 +3124,13 @@ for k,v in pairs(ents.FindByClass("npc_*")) do
  	
 	local startpos = v:EyePos()
 	local endpos = v:EyePos() + v:EyeAngles():Forward() * 10000
-   
+   		local r = gInt("Colors", "NPC", "R");
+		local g = gInt("Colors", "NPC", "G");
+		local b = gInt("Colors", "NPC", "B");
+
 	render.SetMaterial( Laser )
-	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( 255, 255, 255, 255 ) ) 
+
+	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( r, g, b, 255 ) ) 
 
        end
     end
@@ -3140,9 +3142,14 @@ for k,v in pairs(player.GetAll()) do
   if v == LocalPlayer() then continue end
 	local startpos = v:EyePos()
 	local endpos = v:EyePos() + v:EyeAngles():Forward() * 10000
-   
+   		local r = gInt("Colors", "Players", "R");
+		local g = gInt("Colors", "Players", "G");
+		local b = gInt("Colors", "Players", "B");
+
 	render.SetMaterial( Laser )
-	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( 255, 255, 255, 255 ) ) 
+   
+
+	render.DrawBeam(Vector( startpos.x,startpos.y ,startpos.z - 6 ), endpos, 5, 1, 1, Color( r, g, b, 255 ) ) 
             
        end
     end
