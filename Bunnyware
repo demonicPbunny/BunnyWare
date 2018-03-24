@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 20:39 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixes. Local Player now works")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 20:41 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixes. Local Player Filter now works")
 local type = type;
 local next = next;
 
@@ -3740,9 +3740,9 @@ hook.Add("HUDPaint", "localplayerbox", function()
 	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box" && gBool("Visuals", "Filter", "Local Player")) then	
 	 local v = LocalPlayer()
 
-		    local r = gInt("Colors", "NPC", "R");
-		   local g = gInt("Colors", "NPC", "G");
-		  local b = gInt("Colors", "NPC", "B");
+		    local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");
 			local x1,y1,x2,y2 = Get2DBounds(v);
 			
 			local diff = math.abs(x2 - x1);
@@ -3755,9 +3755,9 @@ end
 	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges" && gBool("Visuals", "Filter", "Local Player")) then	
  local v = LocalPlayer()
 
-		    local r = gInt("Colors", "NPC", "R");
-		   local g = gInt("Colors", "NPC", "G");
-		  local b = gInt("Colors", "NPC", "B");
+		    local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");
 			local x1,y1,x2,y2 = Get2DBounds(v);
 			
 			local diff = math.abs(x2 - x1);
