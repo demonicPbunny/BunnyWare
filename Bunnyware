@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 03:55 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: https://github.com/demonicPbunny/BunnyWare/commit/2bd62ba83d80acaa22b67acff94a0987e33fea69")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 05:13 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Added Props option to ASUS Walls")
 local type = type;
 local next = next;
 
@@ -173,7 +173,7 @@ local options = {
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
-		  --  {"Is Reloading", "Checkbox", false, 0},
+		    {"Is Reloading", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
@@ -197,7 +197,9 @@ local options = {
 			{"Radar", "Checkbox", false, 0},
 			{"Radar Size", "Slider", 175, 500, 100},
 			{"No Sky", "Checkbox", false, 0},
+			{"ASUS Type", "Selection", "Default", {"Default", "Props"}, 100},
 			{"ASUS Walls", "Slider2", 100, 100, 100},
+
 			{"Night Mode", "Slider2", 100, 100, 100},
 			{"Thirdperson ", "Slider", 0, -1000, 100},
 			{"View Fov", "Slider", 0, 150, 100},
@@ -2710,8 +2712,8 @@ hook.Add("HUDPaint", "plyweapon", function()
 			local x1,y1,x2,y2 = Get2DBounds(v);
 			local diff = math.abs(x2 - x1);
 			local diff2 = math.abs(y2 - y1);
-      local reload = LocalPlayer():GetActiveWeapon():GetActivity()
-          
+      local reload = v:GetActiveWeapon():GetActivity()
+          --print(reload)
 		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass());
 		surface.SetDrawColor(255,255,255,255)
          surface.SetTextPos(x1,y2)
@@ -2720,6 +2722,7 @@ hook.Add("HUDPaint", "plyweapon", function()
         if(gBool("Visuals", "ESP", "Weapon")) then
         surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass()).." ]");
    end
+
          if (gBool("Visuals", "ESP", "Is Reloading") && reload == 183) then
         	surface.DrawText("  [Reloading] ");
         end 
@@ -3004,6 +3007,7 @@ hook.Add("HUDPaint", "plyskeleton", function()
 local mattable = {};
 
 hook.Add("RenderScene", "asuswalls", function()
+--if(gOption("Visuals", "Other", "ASUS Type") == "Default") then
      local asusvalue = gBool("Visuals", "Other", "ASUS Walls");
 
 	 if tonumber(asusvalue) > 0 then
@@ -3015,12 +3019,38 @@ hook.Add("RenderScene", "asuswalls", function()
 
 	for k,v in next, mattable do
 		v:SetFloat("$alpha", tonumber(asusvalue) / 100);
-		if tonumber(asusvalue) == 0 then
+		if tonumber(asusvalue) == 0  or gOption("Visuals", "Other", "ASUS Type") == "Props" then
 		v:SetFloat("$alpha", 100);
-	end
+	--end
 	end
 end
+end
 end)
+
+hook.Add("RenderScene","asusprops", function()
+	if(gOption("Visuals", "Other", "ASUS Type") == "Props") then
+		
+	
+	 local asusvalue2 = gBool("Visuals", "Other", "ASUS Walls");
+for k,v in pairs(ents.FindByClass("prop_*")) do
+
+v:SetColor(Color(255,255,255,asusvalue2*2.55))
+v:SetRenderMode( RENDERMODE_TRANSALPHA )
+if tonumber(asusvalue2) == 100 then
+v:SetRenderMode( RENDERMODE_NORMAL )
+end
+if(gOption("Visuals", "Other", "ASUS Type") == "Default") then
+v:SetColor(Color(255,255,255,255))
+v:SetRenderMode( RENDERMODE_NORMAL )
+
+end
+end
+
+end
+end)
+
+
+
 
 -- hook.Add("RenderScene", "WireWorld", function()
 -- 	if(gBool("Visuals", "Other", "Wire World")) then
