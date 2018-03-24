@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 05:13 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Added Props option to ASUS Walls")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 20:39 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixes")
 local type = type;
 local next = next;
 
@@ -594,7 +594,7 @@ local function DrawOptions(self, w, h)
 end
 
 local function DrawCheckbox(self, w, h, var, maxy, posx, posy, dist)
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 			local rt = gInt("Gui", "Text", "R");
 	    local gt = gInt("Gui", "Text", "G");
 	    local bt = gInt("Gui", "Text", "B");
@@ -634,7 +634,7 @@ local function DrawSlider2(self, w, h, var, maxy, posx, posy, dist)
 	local curnum = var[3];
 	local max = var[4];
 	local size = var[5];
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 			local rt = gInt("Gui", "Text", "R");
 	    local gt = gInt("Gui", "Text", "G");
 	    local bt = gInt("Gui", "Text", "B");
@@ -684,7 +684,7 @@ local function DrawSlider(self, w, h, var, maxy, posx, posy, dist)
 	local curnum = var[3];
 	local max = var[4];
 	local size = var[5];
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 			local rt = gInt("Gui", "Text", "R");
 	    local gt = gInt("Gui", "Text", "G");
 	    local bt = gInt("Gui", "Text", "B");
@@ -738,7 +738,7 @@ local function DrawSelect(self, w, h, var, maxy, posx, posy, dist)
 	local size = var[5];
 	local curopt = var[3];
 	
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 
 		local rt = gInt("Gui", "Text", "R");
 	    local gt = gInt("Gui", "Text", "G");
@@ -818,7 +818,7 @@ local function DrawSubSub(self, w, h, k, var)
 	    local bt = gInt("Gui", "Text", "B");
 	surface.SetTextColor(rt, gt, bt);
 	
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 	
 	local tw, th = surface.GetTextSize(opt);
 	
@@ -876,7 +876,7 @@ local function DrawSaveButton(self, w, h)
 			curcol[k] = curcol[k] - 2;
 		end
 	end
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 		local r = gInt("Gui", "Text2", "R");
 	    local g = gInt("Gui", "Text2", "G");
 	    local b = gInt("Gui", "Text2", "B");
@@ -903,7 +903,7 @@ local function DrawLoadButton(self, w, h)
 			curcol[k] = curcol[k] - 2;
 		end
 	end
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 			local r = gInt("Gui", "Text2", "R");
 	    local g = gInt("Gui", "Text2", "G"); 
 	    local b = gInt("Gui", "Text2", "B");
@@ -931,7 +931,7 @@ local function Drawcheatsbutton(self, w, h)
 			curcol[k] = curcol[k] - 2;
 		end
 	end
-	surface.SetFont("memeyou2");
+	surface.SetFont("DermaDefaultBold");
 			local r = gInt("Gui", "Text2", "R");
 	    local g = gInt("Gui", "Text2", "G");
 	    local b = gInt("Gui", "Text2", "B");
@@ -3659,6 +3659,122 @@ end
 
 
 
+hook.Add("HUDPaint", "LocalHealth", function()
+		if(gOption("Visuals", "ESP", "Health") == "Bar" && gBool("Visuals", "Filter", "Local Player") or gOption("Visuals", "ESP", "Health") == "Both" && gBool("Visuals", "Filter", "Local Player")) then
+		local v = LocalPlayer()
+		--print("func works")
+		
+					local x1,y1,x2,y2 = Get2DBounds(v);
+			local color = Color(255,45,255)
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+			surface.SetDrawColor(0, 0, 0, 255);
+			surface.DrawLine(x1-4, y1+1,x1-4,y2-1)
+			surface.SetDrawColor(255 - 2.55 * v:Health(), 2.55 * v:Health(),0)
+			surface.DrawRect(x1-5, y2-(diff2/100 * v:Health()),3,diff2/100*(v:Health()))
+			surface.SetDrawColor(5,5,5)
+
+	
+end
+end)
+
+hook.Add("HUDPaint", "LocalHealthNum", function()
+		if(gOption("Visuals", "ESP", "Health") == "Number" && gBool("Visuals", "Filter", "Local Player") or gOption("Visuals", "ESP", "Health") == "Both" && gBool("Visuals", "Filter", "Local Player")) then
+		local v = LocalPlayer()
+		--print("func works")
+		
+		local enemyPos = v:GetPos(v)
+		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
+		local h = enemyPos.y - penemy.y;
+		local w = h / 2.2;
+		local hp = v:Health() * h / 100;
+		if(hp > h) then hp = h; end
+		local diff = h - hp;
+		surface.SetFont("Bunnyware");
+		surface.SetTextColor( 255, 255, 255, 255 )
+		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
+		surface.DrawText(v:Health())
+		surface.SetDrawColor(0, 0, 0, 255);
+		--surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
+		--surface.SetDrawColor( ( 100 - v.Health(v) ) * 2.55, v.Health(v) * 2.55, 0, 255);
+		--surface.DrawRect(enemyPos.x - w / 2 - 4, enemyPos.y - h + diff, 1, hp);
+
+end
+end)
+
+hook.Add("HUDPaint", "LocalName", function()
+if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Local Player")) then	
+	local v = LocalPlayer()
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+             surface.SetDrawColor(255,255,255,255)
+           surface.SetTextPos(x1,y1-25)
+            surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]")
+
+end
+end)
+
+hook.Add("HUDPaint", "Localweapon", function()
+		if(gBool("Visuals", "ESP", "Weapon") && gBool("Visuals", "Filter", "Local Player")) then
+	    local v = LocalPlayer()
+		local w = v.GetActiveWeapon(v);
+		if(w && v.IsValid(w)) then
+	
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+           surface.SetDrawColor(255,255,255,255)
+           surface.SetTextPos(x1,y2)
+		surface.SetFont("Bunnyware");
+		surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass(w)).." ]");
+
+end
+end
+end)
+
+hook.Add("HUDPaint", "localplayerbox", function()
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box" && gBool("Visuals", "Filter", "Local Player")) then	
+	 local v = LocalPlayer()
+
+		    local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
+	
+
+end
+	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges" && gBool("Visuals", "Filter", "Local Player")) then	
+ local v = LocalPlayer()
+
+		    local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+            surface.SetDrawColor(r,g,b)
+		surface.DrawLine( x1, y1, math.min( x1 + 10, x2 ), y1 )
+        surface.DrawLine( x1, y1, x1, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x2, y1, math.max( x2 - 10, x1 ), y1 )
+        surface.DrawLine( x2, y1, x2, math.min( y1 + 10, y2 ) )
+        surface.DrawLine( x1, y2, math.min( x1 + 10, x2 ), y2 )
+        surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
+        surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
+        surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
+	
+
+end
+end )
 
 
 //
