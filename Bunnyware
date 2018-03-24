@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 22, 2018, 20:36 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Disabled Offline Features")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 01:29 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Some text refromated")
 local type = type;
 local next = next;
 
@@ -2277,8 +2277,8 @@ hook.Add("HUDPaint", "gunlabname", function()
 		local tw, th = surface.GetTextSize(v:GetClass());
 	
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 		
-		surface.DrawText(v:GetClass());
 end
 end
 end)
@@ -2337,8 +2337,8 @@ hook.Add("HUDPaint", "moneyprintername", function()
 		local tw, th = surface.GetTextSize(v:GetClass());
 	
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 		
-		surface.DrawText(v:GetClass());
 end
 end
 end)
@@ -2394,7 +2394,7 @@ hook.Add("HUDPaint", "darkrpspawnedname", function()
 	
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
 		
-		surface.DrawText(v:GetClass());
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 end
 end
 end)
@@ -2455,7 +2455,7 @@ hook.Add("HUDPaint", "weaponname", function()
 	
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
 		
-		surface.DrawText(v:GetClass());
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 	end
 end
 end
@@ -2474,7 +2474,7 @@ hook.Add("HUDPaint", "itemname", function()
 	
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
 		
-		surface.DrawText(v:GetClass());
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 end
 end
 end)
@@ -2699,9 +2699,9 @@ hook.Add("HUDPaint", "plyweapon", function()
 		surface.SetDrawColor(255,255,255,255)
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
 		
-		surface.DrawText(v:GetActiveWeapon():GetClass());
-
-end
+		
+        surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass()).." ]");
+end 
 end
 end)
 
@@ -2757,11 +2757,11 @@ hook.Add("HUDPaint", "npcname", function()
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
 		local h = enemyPos.y - penemy.y;
 		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v.GetClass(v));
+		local tw, th = surface.GetTextSize("[ "..language.GetPhrase(v:GetClass()).." ]");
 		
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h - 25 - th );
 		
-		surface.DrawText(v.GetClass(v));
+		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 end
 end
 end)
@@ -2776,11 +2776,11 @@ hook.Add("HUDPaint", "npcweapon", function()
 		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
 		local h = enemyPos.y - penemy.y;
 		local w = h / 2.2;
-		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass(w));
+		local tw,  th = surface.GetTextSize("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass(w)).." ]");
 		
 		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
 		
-		surface.DrawText(v:GetActiveWeapon():GetClass(w));
+		surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass(w)).." ]");
 end
 end
 end
