@@ -173,7 +173,7 @@ local options = {
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
-		    {"Is Reloading", "Checkbox", false, 0},
+		  --  {"Is Reloading", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
