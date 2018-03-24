@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 01:29 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Some text refromated")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 03:51 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Long Update Check GitHub")
 local type = type;
 local next = next;
 
@@ -40,27 +40,47 @@ local math = Copy(math);
 local file = Copy(file);
 local util = Copy(util);
 
-surface.CreateFont("memeyou", {
-	font = "Console",
-	size = 13,
-	weight = 900,
-	shadow = true,
-	antialias = false,
-});
-
-surface.CreateFont("memeyou2", {
-	font = "Console",
-	size = 13,
-	weight = 900,
+surface.CreateFont( "BunnywareMenu", {
+	font = "Xirod",
+	extended = true,
+	size = 12,
+	weight = 1500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
 	shadow = false,
-	antialias = false,
-});
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "Bunnyware", {
+	font = "Corbel",
+	extended = true,
+	size = 15,
+	weight = 15,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
 
 local options = {
 	["LegitBot"] = {
 		{
 			{"Accuracy", 20, 20, 250, 140, 120},
-			{"Smooth", "Slider", 0, 25, 100},
+			{"Smooth", "Slider", 0, 65, 100},
 			{"Fov", "Slider", 0, 25, 100},
 			{"Anti Recoil", "Checkbox", false, 0},
 			{"Fov Range Visual", "Checkbox", false, 0},
@@ -153,6 +173,7 @@ local options = {
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
+		    {"Is Reloading", "Checkbox", false, 0},
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
@@ -490,7 +511,7 @@ local function DrawBackground(w, h)
 	
 	surface.SetDrawColor(curcol);
 	
-	surface.SetFont("CenterPrintText");
+	surface.SetFont("BunnywareMenu");
 	
 	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod (BETA)");
 	
@@ -558,7 +579,7 @@ local function DrawOptions(self, w, h)
 			end
 			visible[v] = !nb;
 		end
-		surface.SetFont("CenterPrintText");
+		surface.SetFont("BunnywareMenu");
 				local r = gInt("Gui", "Option Colors", "R");
 	            local g = gInt("Gui", "Option Colors", "G");
 	            local b = gInt("Gui", "Option Colors", "B");		
@@ -1917,7 +1938,7 @@ local function radarbackground(w, h)
 	
 	surface.SetDrawColor(curcol);
 	
-	surface.SetFont("CenterPrintText");
+	surface.SetFont("BunnywareMenu");
 	
 	local tw, th = surface.GetTextSize("Radar");
 	
@@ -2220,7 +2241,7 @@ RunConsoleCommand("say", messagetable[math.random( 1, #messagetable )])
 
 
 
-
+// start esp
 end
 end)
 local function Get2DBounds(v)
@@ -2270,13 +2291,13 @@ end )
 hook.Add("HUDPaint", "gunlabname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("gunlab")) do
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v:GetClass());
-	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+           surface.SetTextPos(x1,y1-25)
+	    surface.SetFont("Bunnyware");
+
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 		
 end
@@ -2330,13 +2351,13 @@ end )
 hook.Add("HUDPaint", "moneyprintername", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("money_printer")) do
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v:GetClass());
-	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+           surface.SetTextPos(x1,y1-25)
+	    surface.SetFont("Bunnyware");
+
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 		
 end
@@ -2386,14 +2407,12 @@ end )
 hook.Add("HUDPaint", "darkrpspawnedname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
 	    for k, v in pairs(ents.FindByClass("spawned_*")) do
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v:GetClass());
-	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 2 - th );
-		
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+           surface.SetTextPos(x1,y1-25)
+		surface.SetFont("Bunnyware");
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 end
 end
@@ -2447,14 +2466,12 @@ hook.Add("HUDPaint", "weaponname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Weapons")) then
 	    for k, v in pairs(ents.FindByClass("weapon_*")) do
 	    	if ( v:GetOwner() == NULL ) then
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v:GetClass());
-	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
-		
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+           surface.SetTextPos(x1,y1-25)
+		surface.SetFont("Bunnyware");
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 	end
 end
@@ -2466,14 +2483,12 @@ end)
 hook.Add("HUDPaint", "itemname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Items")) then
 	    for k, v in pairs(ents.FindByClass("item_*")) do
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize(v:GetClass());
-	
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h + 25 - th );
-		
+         local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+
+           surface.SetTextPos(x1,y1-25)
+		surface.SetFont("Bunnyware");
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
 end
 end
@@ -2648,15 +2663,15 @@ hook.Add("HUDPaint", "plyname", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Players")) then
 			for k, v in pairs(player.GetAll()) do
        if v == LocalPlayer() then continue end
-		local enemyPos = v:GetPos()
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
+	
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
 		surface.SetTextColor( 255, 255, 255, 255 )
 		local tw, th = surface.GetTextSize(v:Name());
+		surface.SetFont("Bunnyware");
 		
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h - 25 - th );
-		
+		 surface.SetTextPos(x1,y1)
 		surface.DrawText(v:Name());
 
 end
@@ -2685,23 +2700,34 @@ end)
 -- end)
 
 hook.Add("HUDPaint", "plyweapon", function()
-		if(gBool("Visuals", "ESP", "Weapon") && gBool("Visuals", "Filter", "Players")) then
+		if(gBool("Visuals", "Filter", "Players")) then
 	    for k, v in pairs(player.GetAll()) do
        if v == LocalPlayer() then continue end
-	
-		local enemyPos = v:GetPos()
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
+
 		surface.SetTextColor( 255, 255, 255, 255 )
 		if (v:GetActiveWeapon():GetClass() == Null) then continue end
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+      local reload = LocalPlayer():GetActiveWeapon():GetActivity()
+          
 		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass());
 		surface.SetDrawColor(255,255,255,255)
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
+         surface.SetTextPos(x1,y2)
 		
-		
+		surface.SetFont("Bunnyware");
+        if(gBool("Visuals", "ESP", "Weapon")) then
         surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass()).." ]");
-end 
+   end
+         if (gBool("Visuals", "ESP", "Is Reloading") && reload == 183) then
+        	surface.DrawText("  [Reloading] ");
+        end 
+     --   if(gBool("Visuals", "ESP", "Ammo")) then
+     --   surface.DrawText(" Ammo: ( "..language.GetPhrase(v:GetActiveWeapon():Clip1()).." )");	
+        
+--end    
+end
 end
 end)
 
@@ -2739,6 +2765,7 @@ hook.Add("HUDPaint", "npchealthnum", function()
 		local hp = v:Health() * h / 100;
 		if(hp > h) then hp = h; end
 		local diff = h - hp;
+		surface.SetFont("Bunnyware");
 		surface.SetTextColor( 255, 255, 255, 255 )
 		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
 		surface.DrawText(v:Health())
@@ -2751,17 +2778,15 @@ end
 end)
 
 hook.Add("HUDPaint", "npcname", function()
-		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "NPC")) then
-	    for k, v in pairs(ents.FindByClass("npc_*")) do
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw, th = surface.GetTextSize("[ "..language.GetPhrase(v:GetClass()).." ]");
-		
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - h - 25 - th );
-		
-		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
+if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "NPC")) then	
+	for k, v in pairs(ents.FindByClass("npc_*")) do
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+             surface.SetDrawColor(255,255,255,255)
+           surface.SetTextPos(x1,y1-25)
+            surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]")
 end
 end
 end)
@@ -2772,14 +2797,13 @@ hook.Add("HUDPaint", "npcweapon", function()
 		local w = v.GetActiveWeapon(v);
 		if(w && v.IsValid(w)) then
 	
-		local enemyPos = v:GetPos(v)
-		local enemyPos, penemy = vm.ToScreen(enemyPos - Vector(0, 0, 5)), vm.ToScreen( enemyPos + Vector(0, 0, 70 ) );
-		local h = enemyPos.y - penemy.y;
-		local w = h / 2.2;
-		local tw,  th = surface.GetTextSize("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass(w)).." ]");
-		
-		surface.SetTextPos( enemyPos.x - tw / 2, enemyPos.y - th / 2 + 25 );
-		
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+           surface.SetDrawColor(255,255,255,255)
+           surface.SetTextPos(x1,y2)
+		surface.SetFont("Bunnyware");
 		surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass(w)).." ]");
 end
 end
@@ -3461,7 +3485,7 @@ for k, v in pairs(ents.FindByClass("npc_*")) do
 		local r = gInt("Colors", "NPC", "R");
 		local g = gInt("Colors", "NPC", "G");
 		local b = gInt("Colors", "NPC", "B");
-local vec = v:WorldSpaceCenter():ToScreen()
+local vec = v:GetPos():ToScreen()
 local scale = v:GetModelRadius()
 surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
 end    
@@ -3556,7 +3580,10 @@ end
 hook.Add("HUDPaint", "circleespdarkrp2",circleespdarkrp2)
 
 
+local function IsReloading()
 
+
+end	
 
 
 -- local function gethead(ent)
