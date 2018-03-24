@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 03:51 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Long Update Check GitHub")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 03:55 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: https://github.com/demonicPbunny/BunnyWare/commit/2bd62ba83d80acaa22b67acff94a0987e33fea69")
 local type = type;
 local next = next;
 
@@ -3485,7 +3485,7 @@ for k, v in pairs(ents.FindByClass("npc_*")) do
 		local r = gInt("Colors", "NPC", "R");
 		local g = gInt("Colors", "NPC", "G");
 		local b = gInt("Colors", "NPC", "B");
-local vec = v:GetPos():ToScreen()
+local vec = v:WorldSpaceCenter():ToScreen()
 local scale = v:GetModelRadius()
 surface.DrawCircle(math.floor(vec.x),math.floor(vec.y),scale,r,g,b,255)
 end    
