@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 00:05 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixed viewangle bug")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 00:15 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Admin Box Added")
 local type = type;
 local next = next;
 
@@ -3852,12 +3852,12 @@ function text(w, h )
 	local boxw, boxh = w/5.9 - 55, h/5.5
 
    surface.SetFont("CenterPrintText");
-	local tw, th = surface.GetTextSize("Player Information");
+	local tw, th = surface.GetTextSize("Player List");
 	surface.SetTextPos(350/2.5, h/15 - th / 2);
 	surface.SetTextColor(255,255,255,255);
 
 	
-	surface.DrawText("Player Information");
+	surface.DrawText("     Player List");
 
 end
 
@@ -3881,42 +3881,57 @@ surface.DrawText("Name: "..name.." | HP: "..hp);
 
 end
 end
-local function DrawBackground2(w, h)
 
-	surface.SetDrawColor(255, 0, 0, 255);
+local function box2(w,h)
+local boxw, boxh = w/5.9 - 55, h/15
+	local plycount = #player.GetAll()
 
-    local pw,ph = w-7, h-35
-	surface.DrawRect(4, 31, pw, ph);
+surface.SetDrawColor(0,0,0,255)
+surface.DrawOutlinedRect(w/9 - 55, h/15 - 15,250,50 + plycount*14)
+surface.DrawLine(boxw/2 - 10 - 1,boxh + 15,boxw + 215,boxh + 15)
 
-	local curcol = Color(255, 0, 0, 150);
-	
-	for i = 0, 30 do
-		surface.SetDrawColor(curcol);
-		
-
-		draw.RoundedBox( 9, i-25, i-25, w, 35, curcol )
-
-	end
-	
-	surface.SetDrawColor(curcol);
-	
-	surface.SetFont("CenterPrintText");
-	
-	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod (BETA)");
-	
-	surface.SetTextPos(5, 15 - th / 2);
-	
-	surface.SetTextColor(0, 255, 0, 255);
-	
-	surface.DrawText("BUNNYWARE for Garry's Mod (BETA)");
-/////////////////////////////////////////////////////////////////////////////////////////
-
-//surface.DrawRect(number x,number y,number width,number height)
-
-
- 
 end
 
+function text2(w, h )
+
+	local boxw, boxh = w/5.9 - 55, h/5.5
+
+   surface.SetFont("CenterPrintText");
+	local tw, th = surface.GetTextSize("Admin List");
+	surface.SetTextPos(275/2.5, h/15 - th / 2);
+	surface.SetTextColor(255,255,255,255);
+
+	
+	surface.DrawText("Admin List");
+
+end
+
+function Admins(w, h)
+	local plycount = #player.GetAll()
+	local Players = player.GetAll()
+--for i = 1, tonumber(plycount) do
+for i = 1, table.Count(Players) do
+local ply = Players[i]
+local name = ply:Name()
+local admin = ply:IsAdmin()
+local Sadmin = ply:IsSuperAdmin()
+
+	local boxw, boxh = w/5.9 - 55, h/9
+surface.SetFont("CenterPrintText");
+local tw, th = surface.GetTextSize("name".."test");
+surface.SetTextPos(boxw/2 - 9, boxh - 22 - th / 2 + 15 + i*15 - 5);
+surface.SetTextColor(255,255,255,255);
+if ( ply:IsAdmin() ) then
+surface.DrawText(""..name.." | Is a Admin");
+elseif ( ply:IsSuperAdmin() ) then
+surface.DrawText(""..name.." | Is a Super Admin");
+else
+	surface.DrawText("");
+end
+end 
+end
+
+		
 
 
 local function menu()
@@ -3940,14 +3955,18 @@ text(w, h);
 Listplayers(w, h);
 end
 
-sheet:AddSheet( "Information", panel1, "icon16/information.png" )
+sheet:AddSheet( "Player Panel", panel1, "icon16/user.png" )
 
 local panel2 = vgui.Create( "DPanel", sheet )
 panel2.Paint = function( self, w, h ) 
-DrawBackground2(w, h);
+	panel2:SetBackgroundColor(Color(60,60,60,255))
+	draw.RoundedBox( 4, 0, 0, w, h, Color( 60, 60, 60, self:GetAlpha() ) )
+box2(w, h);
+text2(w, h);
+Admins(w,h);
 
 end
-sheet:AddSheet( "WIP", panel2, "icon16/tick.png" )
+sheet:AddSheet( "Admin Panel", panel2, "icon16/award_star_gold_1.png" )
 
 
 
