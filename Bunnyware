@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 05:51 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Added Props option to ASUS Walls")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 25, 2018, 23:35 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Hot fixes")
 local type = type;
 local next = next;
 
@@ -1759,6 +1759,7 @@ hook.Add("CreateMove", "memmeme", memee)
 
 local function Bugfix(ucmd)
 if(input.IsButtonDown(IN_USE)) then
+
 hook.Remove("CreateMove", "memmeme")
 end
 if(!input.IsButtonDown(IN_USE)) then
@@ -3852,18 +3853,23 @@ end
 
 function Listplayers(w, h)
 	local plycount = #player.GetAll()
-for i = 1, tonumber(plycount) do
+	local Players = player.GetAll()
+--for i = 1, tonumber(plycount) do
+for i = 1, table.Count(Players) do
 
-local name = Entity( i ):Name()
-local hp = Entity( i ):Health()
-local wep = language.GetPhrase(Entity( i ):GetActiveWeapon():GetClass())
+	local ply = Players[i]
+
+local name = ply:Name()
+local hp = ply:Health()
+--local wep = ply:GetActiveWeapon():GetClass()
 	local boxw, boxh = w/5.9 - 55, h/9
 surface.SetFont("CenterPrintText");
 local tw, th = surface.GetTextSize("name".."test");
 surface.SetTextPos(boxw/2 - 5, boxh - 22 - th / 2 + 15 + i*15 - 5);
 surface.SetTextColor(255,255,255,255);
-surface.DrawText("Name: "..name.." | HP: "..hp.." | Weapon: "..wep);
-end 
+surface.DrawText("Name: "..name.." | HP: "..hp);
+
+end
 end
 local function DrawBackground2(w, h)
 
