@@ -1,9 +1,10 @@
 
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Open MainMenu on Insert. Open Server Menu on end")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 20:41 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixes. Local Player Filter now works")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 25,  2018, 21:22 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: New Feature: Server Menu. Open on End.")
 local type = type;
 local next = next;
 
@@ -2651,7 +2652,7 @@ hook.Add("HUDPaint", "plyhealthnum", function()
 		local diff = h - hp;
 		surface.SetTextColor( 255, 255, 255, 255 )
 		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
-		surface.DrawText(v:Health())
+		surface.DrawText(v:Health().." HP")
 		--surface.SetDrawColor(0, 0, 0, 255);
 		--surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
 		--surface.SetDrawColor( ( 100 - v.Health(v) ) * 2.55, v.Health(v) * 2.55, 0, 255);
@@ -2771,7 +2772,7 @@ hook.Add("HUDPaint", "npchealthnum", function()
 		surface.SetFont("Bunnyware");
 		surface.SetTextColor( 255, 255, 255, 255 )
 		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
-		surface.DrawText(v:Health())
+		surface.DrawText(v:Health().." HP")
 		surface.SetDrawColor(0, 0, 0, 255);
 		--surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
 		--surface.SetDrawColor( ( 100 - v.Health(v) ) * 2.55, v.Health(v) * 2.55, 0, 255);
@@ -3694,7 +3695,7 @@ hook.Add("HUDPaint", "LocalHealthNum", function()
 		surface.SetFont("Bunnyware");
 		surface.SetTextColor( 255, 255, 255, 255 )
 		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
-		surface.DrawText(v:Health())
+		surface.DrawText(v:Health().." HP")
 		surface.SetDrawColor(0, 0, 0, 255);
 		--surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
 		--surface.SetDrawColor( ( 100 - v.Health(v) ) * 2.55, v.Health(v) * 2.55, 0, 255);
@@ -3822,3 +3823,142 @@ local function htmlpagebrain()
 	end
 hook.Add("Think", "htmlpb", htmlpagebrain);
 //
+
+local enddown2, enddown, smenuopen;
+
+
+local function box(w,h)
+local boxw, boxh = w/5.9 - 55, h/15
+	local plycount = #player.GetAll()
+
+surface.SetDrawColor(0,0,0,255)
+surface.DrawOutlinedRect(w/9 - 55, h/15 - 15,350,50 + plycount*14)
+surface.DrawLine(boxw/2 - 10 - 1,boxh + 15,boxw + 315,boxh + 15)
+
+end
+
+function text(w, h )
+
+	local boxw, boxh = w/5.9 - 55, h/5.5
+
+   surface.SetFont("CenterPrintText");
+	local tw, th = surface.GetTextSize("Player Information");
+	surface.SetTextPos(350/2.5, h/15 - th / 2);
+	surface.SetTextColor(255,255,255,255);
+
+	
+	surface.DrawText("Player Information");
+
+end
+
+function Listplayers(w, h)
+	local plycount = #player.GetAll()
+for i = 1, tonumber(plycount) do
+
+local name = Entity( i ):Name()
+local hp = Entity( i ):Health()
+local wep = language.GetPhrase(Entity( i ):GetActiveWeapon():GetClass())
+	local boxw, boxh = w/5.9 - 55, h/9
+surface.SetFont("CenterPrintText");
+local tw, th = surface.GetTextSize("name".."test");
+surface.SetTextPos(boxw/2 - 5, boxh - 22 - th / 2 + 15 + i*15 - 5);
+surface.SetTextColor(255,255,255,255);
+surface.DrawText("Name: "..name.." | HP: "..hp.." | Weapon: "..wep);
+end 
+end
+local function DrawBackground2(w, h)
+
+	surface.SetDrawColor(255, 0, 0, 255);
+
+    local pw,ph = w-7, h-35
+	surface.DrawRect(4, 31, pw, ph);
+
+	local curcol = Color(255, 0, 0, 150);
+	
+	for i = 0, 30 do
+		surface.SetDrawColor(curcol);
+		
+
+		draw.RoundedBox( 9, i-25, i-25, w, 35, curcol )
+
+	end
+	
+	surface.SetDrawColor(curcol);
+	
+	surface.SetFont("CenterPrintText");
+	
+	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod (BETA)");
+	
+	surface.SetTextPos(5, 15 - th / 2);
+	
+	surface.SetTextColor(0, 255, 0, 255);
+	
+	surface.DrawText("BUNNYWARE for Garry's Mod (BETA)");
+/////////////////////////////////////////////////////////////////////////////////////////
+
+//surface.DrawRect(number x,number y,number width,number height)
+
+
+ 
+end
+
+
+
+local function menu()
+	local frame = vgui.Create("DFrame");
+	frame:SetSize(600, 600);
+	frame:Center();
+	frame:SetTitle("[ Server Menu ]");
+	frame:SetVisible(true)
+	frame:MakePopup();
+	frame:ShowCloseButton(false);
+	
+local sheet = vgui.Create( "DPropertySheet", frame )
+sheet:Dock( FILL )
+
+local panel1  = vgui.Create( "DPanel", sheet )
+panel1.PaintOver = function( self, w, h ) 
+panel1:SetBackgroundColor(Color(65,65,65,255))
+--DrawBackground(w, h);
+box(w, h)
+text(w, h);
+Listplayers(w, h);
+end
+
+sheet:AddSheet( "Information", panel1, "icon16/information.png" )
+
+local panel2 = vgui.Create( "DPanel", sheet )
+panel2.Paint = function( self, w, h ) 
+DrawBackground2(w, h);
+
+end
+sheet:AddSheet( "WIP", panel2, "icon16/tick.png" )
+
+
+
+	frame.Think = function()
+		if (input.IsKeyDown(KEY_END) && !enddown2) then
+			frame:Remove();
+			smenuopen = false;
+			candoslider = false;
+			drawlast2 = nil;
+		end
+	end
+end
+
+
+local function Smenu()
+	if (input.IsKeyDown(KEY_END) && !smenuopen && !enddown) then
+		smenuopen = true;
+		enddown = true;
+		menu();
+	elseif (!input.IsKeyDown(KEY_END) && !smenuopen) then
+		enddown = false;
+	end
+	if (input.IsKeyDown(KEY_END) && enddown && smenuopen) then
+		enddown2 = true;
+	else
+		enddown2 = false;
+	end
+end
+hook.Add("Think", "Smenu", Smenu);
