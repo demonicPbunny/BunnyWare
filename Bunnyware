@@ -1,10 +1,9 @@
 
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Open MainMenu on Insert. Open Server Menu on end")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 25,  2018, 21:22 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: New Feature: Server Menu. Open on End.")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 24, 2018, 05:51 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Added Props option to ASUS Walls")
 local type = type;
 local next = next;
 
@@ -1759,10 +1758,10 @@ end
 hook.Add("CreateMove", "memmeme", memee)
 
 local function Bugfix(ucmd)
-if(ucmd:KeyDown(IN_USE)) then
+if(input.IsButtonDown(IN_USE)) then
 hook.Remove("CreateMove", "memmeme")
 end
-if(!ucmd:KeyDown(IN_USE)) then
+if(!input.IsButtonDown(IN_USE)) then
 hook.Add("CreateMove", "memmeme", memee)
 end
 end
@@ -2703,7 +2702,7 @@ end)
 -- end)
 
 hook.Add("HUDPaint", "plyweapon", function()
-				if(gBool("Visuals", "Filter", "Players") && gBool("Visuals", "ESP", "Weapon")) then
+		if(gBool("Visuals", "Filter", "Players") && gBool("Visuals", "ESP", "Weapon")) then
 	    for k, v in pairs(player.GetAll()) do
        if v == LocalPlayer() then continue end
 
