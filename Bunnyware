@@ -2,9 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 25, 2018, 23:35 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "I've noticed that if players got some custom weapons it breaks. Expect an update soon!")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Hot fixes")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 00:05 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Fixed viewangle bug")
 local type = type;
 local next = next;
 
@@ -1582,7 +1581,7 @@ local function meme(ucmd)
 	if(!fa) then fa = cm.GetViewAngles(ucmd); end
 	fa = fa + Angle(cm.GetMouseY(ucmd) * .023, cm.GetMouseX(ucmd) * -.023, 0);
 	NormalizeAngle(fa);
-	if(cm.CommandNumber(ucmd) == 0 && gBool("Ragebot", "Aimbot", "Silent") or ucmd:KeyDown(IN_USE)) then
+	if(cm.CommandNumber(ucmd) == 0 && gBool("Ragebot", "Aimbot", "Silent") or ucmd:KeyDown(IN_USE) or !gBool("LegitBot", "Aimbot", "Enabled") or !gBool("Ragebot", "Aimbot", "Enabled")) then
 
 		cm.SetViewAngles(ucmd, GetAngle(fa));
 
@@ -1758,16 +1757,26 @@ local function memee(ucmd)
 end
 hook.Add("CreateMove", "memmeme", memee)
 
-local function Bugfix(ucmd)
-if(input.IsButtonDown(IN_USE)) then
+local function bugfix()
+if(!gBool("LegitBot", "Aimbot", "Enabled")) then
+--FixMovement(ucmd, true);
+end
+if(gBool("LegitBot", "Aimbot", "Enabled")) then
+--	FixMovement(ucmd, false);
+end
+end 
+hook.Add("CreateMove","PhysgunE", bugfix)
+-- local function Bugfix(ucmd)
 
-hook.Remove("CreateMove", "memmeme")
-end
-if(!input.IsButtonDown(IN_USE)) then
-hook.Add("CreateMove", "memmeme", memee)
-end
-end
-hook.Add("CreateMove","PhysgunE", Bugfix)
+-- if(input.IsButtonDown(IN_USE)) then
+-- FixMovement(ucmd, true);
+-- --hook.Remove("CreateMove", "memmeme")
+-- end
+-- if(!input.IsButtonDown(IN_USE)) then
+-- --hook.Add("CreateMove", "memmeme", memee)
+-- end
+-- end
+-- hook.Add("CreateMove","PhysgunE", Bugfix)
 
 local function bhoops(ucmd)
 bunnyhop(ucmd);
