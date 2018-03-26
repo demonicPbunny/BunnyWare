@@ -161,7 +161,6 @@ local options = {
 			{"Classic ESP", "Checkbox", false, 0},
 			{"ESP Style", "Selection", "2D Box", {"2D Box", "Edges", "Circle"}, 100},
 			{"Name", "Checkbox", false, 0},
-			-- {"Health", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
 			{"Weapon", "Checkbox", false, 0},
 			--{"Ammo", "Checkbox", false, 0},
@@ -174,7 +173,7 @@ local options = {
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
-		    {"Is Reloading", "Checkbox", false, 0},
+		    --{"Is Reloading", "Checkbox", false, 0},
 
 		},
 		{
@@ -185,12 +184,11 @@ local options = {
 			{"Enemies only", "Checkbox", false, 0},
 			{"Distance", "Checkbox", false, 0},
 			{"Max Distance", "Slider", 0, 10000, 100},
-
 			{"Weapons", "Checkbox", false, 0},
 			{"Items", "Checkbox", false, 0},
 			{"Dark RP", "Checkbox", false, 0},
-			{"TTT", "Checkbox", false, 0},
-			{"Pulsar Effect", "Checkbox", false, 0},
+			--{"TTT", "Checkbox", false, 0},
+			--{"Pulsar Effect", "Checkbox", false, 0},
 		},
 		{
 			{"Other", 570, 20, 250, 550, 120},
@@ -204,7 +202,7 @@ local options = {
 
 			{"Night Mode", "Slider2", 100, 100, 100},
 			{"Thirdperson ", "Slider", 0, -1000, 100},
-			{"View Fov", "Slider", 0, 150, 100},
+			--{"View Fov", "Slider", 0, 150, 100},
    		    {"Viewmodel Fov", "Slider", 0, 150, 100},
 			{"Speed Indicator", "Checkbox", false, 0},
 			{"Wire Weapon", "Checkbox", false, 0},
@@ -231,16 +229,16 @@ local options = {
 		{
 			{"Other", 400, 20, 350, 150, 220},
 			{"Kill Message", "Checkbox", false, 54},
-			{"God mode", "Checkbox", false, 54},
-			{"Set Health ", "Slider", 0, 999, 100},
-			{"Set Armor ", "Slider", 0, 999, 100},
+			--{"God mode", "Checkbox", false, 54},
+			--{"Set Health ", "Slider", 0, 999, 100},
+			--{"Set Armor ", "Slider", 0, 999, 100},
 			
 		},
-		{
-			{"SpeedHack", 400, 340, 350, 75, 220},
-			{"Enable", "Checkbox", false, 54},
-			{"Factor ", "Slider", 0, 15, 100},
-		},
+		-- {
+		-- 	{"SpeedHack", 400, 340, 350, 75, 220},
+		-- 	{"Enable", "Checkbox", false, 54},
+		-- 	{"Factor ", "Slider", 0, 15, 100},
+		-- },
 				{
 			{"HitMarkers", 400, 280, 350, 50, 220},
 			{"Enable", "Checkbox", false, 54},
@@ -517,13 +515,13 @@ local function DrawBackground(w, h)
 	
 	surface.SetFont("BunnywareMenu");
 	
-	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod (BETA)");
+	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod");
 	
 	surface.SetTextPos(5, 15 - th / 2);
 	
 	surface.SetTextColor(255, 255, 255);
 	
-	surface.DrawText("BUNNYWARE for Garry's Mod (BETA)");
+	surface.DrawText("BUNNYWARE for Garry's Mod");
 	draw.RoundedBox(20, 0, 31, 5, h - 31, curcol ) -- surface.DrawRect(0, 31, 5, h - 31);
 	draw.RoundedBox(20, 0, h - 5, w, h, curcol ) -- surface.DrawRect(0, h - 5, w, h);
 	draw.RoundedBox(20, w - 5, 31, 5, h, curcol ) --surface.DrawRect(w - 5, 31, 5, h);
@@ -1205,20 +1203,22 @@ end
 		end
 end)
 */
-/*
+
 hook.Add("HUDPaint", "", function()
 	if(aimtarget && gBool("Ragebot", "Target", "Snapline")) then
 		local pos = vm.ToScreen(em.LocalToWorld(aimtarget, em.OBBCenter(aimtarget)));
 		surface.SetDrawColor(255, 255, 255);
 		surface.DrawLine(ScrW() / 2, ScrH() / 2, pos.x, pos.y);
 	end
+	end);
+/*
 	if(!gBool("Visuals", "ESP", "Enabled")) then return; end
 	for k,v in next, player.GetAll() do
 		if(!em.IsValid(v) || em.Health(v) < 1 || v == me || em.IsDormant(v)) then continue; end
 		if(!Filter(v)) then continue; end
 		--ESP(v);
 	end
-end);
+
 
 hook.Add("RenderScreenspaceEffects", "", function()
 	if(!gBool("Visuals", "ESP", "Enabled")) then return; end
