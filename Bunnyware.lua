@@ -1918,19 +1918,19 @@ end
 end
 hook.Add( "Think", "vfov", viewmodelfov )
  
-local function viewfov()
-    local viewfovdist = gBool("Visuals", "Other", "View Fov");
+-- local function viewfov()
+--     local viewfovdist = gBool("Visuals", "Other", "View Fov");
 	 
-	if viewfovdist > 0 then
-	local ply = LocalPlayer()
-	ply:SetFOV(tonumber(viewfovdist), "0")
-end
-    if viewfovdist == 0 then
-	ply = LocalPlayer()
-	ply:SetFOV("90", "0")
-end	
-end
-hook.Add( "Think", "wfov", viewfov) 
+-- 	if viewfovdist > 0 then
+-- 	local ply = LocalPlayer()
+-- 	ply:SetFOV(tonumber(viewfovdist), "0")
+-- end
+--     if viewfovdist == 0 then
+-- 	ply = LocalPlayer()
+-- 	ply:SetFOV("90", "0")
+-- end	
+-- end
+-- hook.Add( "Think", "wfov", viewfov) 
 
 local function radarbackground(w, h)
 	local rb = gInt("Gui", "Background", "R");
