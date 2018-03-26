@@ -3,7 +3,7 @@ if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 03:00 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Hitbox Added")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Config] Re-Enabled Config save/load")
 local type = type;
 local next = next;
 
@@ -424,8 +424,8 @@ local function updatevar( men, sub, lookup, new )
 end
 
 local function loadconfig()
-	if(!file.Exists("memeware.txt", "DATA")) then return; end
-	local tab = util.JSONToTable( file.Read("memeware.txt", "DATA") );
+	if(!file.Exists("bunnyware.txt", "DATA")) then return; end
+	local tab = util.JSONToTable( file.Read("bunnyware.txt", "DATA") );
 	local cursub;
 	for k,v in next, tab do
 		if(!options[k]) then continue; end
@@ -478,7 +478,7 @@ local function gInt(men, sub, lookup)
 end
 
 local function saveconfig()
-	--file.Write("memeware.txt", util.TableToJSON(options));
+	file.Write("bunnyware.txt", util.TableToJSON(options));
 end
 
 local mousedown;
