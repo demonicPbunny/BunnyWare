@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 00:15 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Admin Box Added")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 03:00 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Hitbox Added")
 local type = type;
 local next = next;
 
@@ -169,11 +169,13 @@ local options = {
 			{"Chams", "Checkbox", false, 0},
 			{"Skeleton", "Checkbox", false, 0},
 			{"Glow ", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
+			{"Hitbox", "Selection", "Off", {"Off", "On", "Color", "Rainbow"}, 100},
 		    {"Weapon Chams", "Checkbox", false, 0},
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
 		    {"Is Reloading", "Checkbox", false, 0},
+
 		},
 		{
 			{"Filter", 290, 20, 250, 550, 120},
@@ -1963,10 +1965,27 @@ local function radarbackground(w, h)
 	draw.RoundedBox(20, 0, 2, 5, h, curcol ) -- surface.DrawRect(0, 31, 5, h - 31);
 	draw.RoundedBox(20, -3, h - 5, w + 7, h, curcol ) -- surface.DrawRect(0, h - 5, w, h);
 	draw.RoundedBox(20, w - 5, 2, 5, h, curcol ) --surface.DrawRect(w - 5, 31, 5, h);
-	
-	
-end
 
+
+end
+	
+	local function OriginCam(self, w,h)
+if (gBool("Visuals", "Other", "Radar")) then
+		local rdist = gBool("Visuals", "Other", "Radar Size");
+	local CamData = {}
+	CamData.angles = Angle(90,LocalPlayer():EyeAngles().yaw,0)
+	CamData.origin = LocalPlayer():GetPos()+Vector(0,0,4500)
+	CamData.fov = 15
+	CamData.x = 50
+	CamData.y = 175
+	CamData.w = self
+	CamData.h = self
+	CamData.drawviewer = false
+	
+	render.RenderView( CamData )
+end
+end
+--hook.Add("HUDPaint", "OriginCam", OriginCam)
 
 local failsafe2, failsafe, radaropen;
 local function radar()
@@ -1985,6 +2004,7 @@ local function radar()
     local center = Vector( frame:GetTall() / 2, frame:GetWide() / 2, 0 )
 	local scale = Vector( 50, 50, 0 )
 	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	--OriginCam(w,h)
 	radarbackground(w, h);
 	function frame:OnMousePressed()
 	if self.m_bSizable and gui.MouseX() > ( self.x + self:GetWide() - 20 ) and gui.MouseY() > ( self.y + self:GetTall() - 20 ) then
@@ -3996,3 +4016,54 @@ local function Smenu()
 	end
 end
 hook.Add("Think", "Smenu", Smenu);
+
+
+hook.Add("HUDPaint", "plyhitbox", function()
+	if(gBool("Visuals","Filter","Players")) then
+     
+local colors = {
+blue = Color(0,0,255,255),
+red = Color(255,0,0,255),
+green = Color(0,255,0,255),
+yellow = Color(255,255,0,255),
+}
+	 for k,v in next, player.GetAll() do
+	 			local pos = em.GetPos(v);
+	local min, max = em.GetCollisionBounds(v);
+	local pos2 = pos + Vector(0, 0, max.z);
+	local pos = vm.ToScreen(pos);
+	local pos2 = vm.ToScreen(pos2);
+local me = LocalPlayer()
+		if(!v || !em.IsValid(v) || em.Health(v) < 1 || em.IsDormant(v) || v == me) then continue; end
+
+		for i = 0, em.GetHitBoxGroupCount(v) - 1 do
+			 local count = em.GetHitBoxCount(v, i);
+			if(!count) then continue; end
+			 for hitbox = 0, count do
+			local bone = em.GetHitBoxBone( v, hitbox, i );
+
+			if(!bone) then continue; end
+			local min, max = em.GetHitBoxBounds( v, hitbox, i );
+		    local bonepos, boneang = em.GetBonePosition( v, bone );
+			
+			 cam.Start3D();
+			-- render.DrawSphere(Vector position,number radius,number longitudeSteps,number latitudeSteps,table color)
+			if(gOption("Visuals", "ESP", "Hitbox") == "Rainbow") then
+			render.DrawWireframeBox(bonepos, boneang,min,max,table.Random( colors ), true)
+			end
+			if(gOption("Visuals", "ESP", "Hitbox") == "On") then
+			render.DrawWireframeBox(bonepos, boneang,min,max,Color(255,255,255,255), true)
+			end
+			if(gOption("Visuals", "ESP", "Hitbox") == "Color") then
+			local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");	
+			render.DrawWireframeBox(bonepos, boneang,min,max,Color(r,g,b,255), true)
+			end			
+			 cam.End3D();
+		
+		end
+		end
+	end
+	end
+	end)
