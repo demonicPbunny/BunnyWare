@@ -2,8 +2,11 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Current Build: Mar 26, 2018, 03:00 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Latest Update: [Visuals] Hitbox Added")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Current Build: Mar 31, 2018, 03:16 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Latest Update: ReWorked: Rainbow, Rainbow Apply to all filters")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Planned Update: Add Glow to Dark RP. Add Faded ESP Box. Add Rainbow to Chams.") 
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Reverse Rainbow to chams invsis. ReAdd Weapons to Server Menu with new type of method")
+
 local type = type;
 local next = next;
 
@@ -520,7 +523,7 @@ local function DrawBackground(w, h)
 	local tw, th = surface.GetTextSize("BUNNYWARE for Garry's Mod (BETA)");
 	
 	surface.SetTextPos(5, 15 - th / 2);
-	
+	 
 	surface.SetTextColor(255, 255, 255);
 	
 	surface.DrawText("BUNNYWARE for Garry's Mod (BETA)");
@@ -3140,7 +3143,7 @@ hook.Add("PostDraw2DSkyBox", "no sky", function()
 	render.Clear(0, 0, 0, 0, true, true)
 end)
 
-
+// glow
 hook.Add( "PreDrawHalos", "AddHalos", function()
 if(gBool("Visuals","Filter","NPC")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
@@ -3150,7 +3153,15 @@ if(gBool("Visuals","Filter","NPC")) then
 	    local a = gInt("Colors", "Glow", "A");	
 		halo.Add( ents.FindByClass( "npc_*" ) , Color( r, g, b ), a, a, 1, true, true )
 		end
+		  end
+		  if(gBool("Visuals","Filter","NPC")) then
+		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
+       local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	    local a = gInt("Colors", "Glow", "A");
+		halo.Add( ents.FindByClass( "npc_*" ) , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+
 		end
+	end
 end )
 hook.Add( "PreDrawHalos", "AddHalos2", function()
 if(gBool("Visuals","Filter","Weapons")) then
@@ -3161,17 +3172,17 @@ if(gBool("Visuals","Filter","Weapons")) then
 	    local a = gInt("Colors", "Glow", "A");	
 		halo.Add( ents.FindByClass( "weapon_*" ) , Color( r, g, b ), a, a, 1, true, true )
 		end
-		end
-end )
-hook.Add( "PreDrawHalos", "AddHalos3", function()
-    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
-		local r = math.random( 1, 255 );
-		local g = math.random( 1, 255 );
-		local b = math.random( 1, 255 );
+		  end
+		  if(gBool("Visuals","Filter","Weapons")) then
+		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
+       local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
 	    local a = gInt("Colors", "Glow", "A");
-		halo.Add( ents.FindByClass( "npc_*" ) , Color( r, g, b ), a, a, 1, true, true )
+		halo.Add( ents.FindByClass( "weapon_*" ) , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+
+		end
 	end
 end )
+
 hook.Add( "PreDrawHalos", "AddHalos4", function()
 if(gBool("Visuals","Filter","Items")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
@@ -3180,9 +3191,16 @@ if(gBool("Visuals","Filter","Items")) then
 		local b = gInt("Colors", "Glow", "B");
 	    local a = gInt("Colors", "Glow", "A");	
 		halo.Add( ents.FindByClass( "item_*" ) , Color( r, g, b ), a, a, 1, true, true )
-		
 		end
+		  end
+		  if(gBool("Visuals","Filter","Items")) then
+		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
+       local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	    local a = gInt("Colors", "Glow", "A");
+		halo.Add( ents.FindByClass( "item_*" ) , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+
 		end
+	end
 end )
 hook.Add( "PreDrawHalos", "AddHalos5", function()
 if(gBool("Visuals","Filter","Players")) then
@@ -3197,12 +3215,26 @@ if(gBool("Visuals","Filter","Players")) then
 	    	table.insert( plys, v )
 	    	end
 	    halo.Add(plys , Color( r, g, b ), a, a, 1, true, true )	
-	    
-		
-		
 		end
+		  end
+
+		  if(gBool("Visuals","Filter","Players")) then
+		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then
+		    	 local plys = {}
+		    	    for k,v in pairs(player.GetAll()) do
+	    	if v == LocalPlayer() then continue end
+	    	table.insert( plys, v )
+	    	end	
+       local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	    local a = gInt("Colors", "Glow", "A");
+		halo.Add(plys , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+           
 		end
+	end
 end )
+// end of glow
+// hitmarker 
+
 CreateClientConVar("hitmarker_enabled", 1, true, false);
 CreateClientConVar("hitmarker_sound", 1, true, false);
 CreateClientConVar("hitmarker_npc", 1, true, false);
@@ -4023,12 +4055,12 @@ hook.Add("Think", "Smenu", Smenu);
 hook.Add("HUDPaint", "plyhitbox", function()
 	if(gBool("Visuals","Filter","Players")) then
      
-local colors = {
-blue = Color(0,0,255,255),
-red = Color(255,0,0,255),
-green = Color(0,255,0,255),
-yellow = Color(255,255,0,255),
-}
+-- local colors = {
+-- blue = Color(0,0,255,255),
+-- red = Color(255,0,0,255),
+-- green = Color(0,255,0,255),
+-- yellow = Color(255,255,0,255),
+-- }
 	 for k,v in next, player.GetAll() do
 	 			local pos = em.GetPos(v);
 	local min, max = em.GetCollisionBounds(v);
@@ -4051,7 +4083,8 @@ local me = LocalPlayer()
 			 cam.Start3D();
 			-- render.DrawSphere(Vector position,number radius,number longitudeSteps,number latitudeSteps,table color)
 			if(gOption("Visuals", "ESP", "Hitbox") == "Rainbow") then
-			render.DrawWireframeBox(bonepos, boneang,min,max,table.Random( colors ), true)
+			local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+			render.DrawWireframeBox(bonepos, boneang,min,max,Color(color.r,color.g,color.b,255), true)
 			end
 			if(gOption("Visuals", "ESP", "Hitbox") == "On") then
 			render.DrawWireframeBox(bonepos, boneang,min,max,Color(255,255,255,255), true)
