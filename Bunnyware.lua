@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 31, 2018, 03:08 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Added Rainbow to Chams, Weapon Chams And Wire Weapon")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 31, 2018, 18:12 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Physgun E is now permanently fixed i promise")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -1761,12 +1761,11 @@ local function memee(ucmd)
 end
 hook.Add("CreateMove", "memmeme", memee)
 
-local function bugfix()
-if(!gBool("LegitBot", "Aimbot", "Enabled")) then
---FixMovement(ucmd, true);
-end
-if(gBool("LegitBot", "Aimbot", "Enabled")) then
---	FixMovement(ucmd, false);
+local function bugfix(cmd)
+if(cmd:KeyDown(IN_USE)) then
+hook.Remove("CreateMove", "memmeme")
+else
+hook.Add("CreateMove", "memmeme", memee)
 end
 end 
 hook.Add("CreateMove","PhysgunE", bugfix)
