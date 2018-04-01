@@ -2,10 +2,10 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Current Build: Mar 31, 2018, 03:16 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Latest Update: ReWorked: Rainbow, Rainbow Apply to all filters")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Planned Update: Add Glow to Dark RP. Add Faded ESP Box. Add Rainbow to Chams.") 
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Reverse Rainbow to chams invsis. ReAdd Weapons to Server Menu with new type of method")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:44 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Latest Update: Fixed bhop and autostrafe in water")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "Planned Update: Add Glow to Dark RP. Add Faded ESP Box. .") 
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare Beta]", Color( 255, 255, 255, 255 ), "")
 
 local type = type;
 local next = next;
@@ -169,11 +169,13 @@ local options = {
 			{"Weapon", "Checkbox", false, 0},
 			--{"Ammo", "Checkbox", false, 0},
 			{"XQZ", "Checkbox", false, 0},
-			{"Chams", "Checkbox", false, 0},
+			--{"Chams", "Checkbox", false, 0},
+			{"Chams", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 			{"Skeleton", "Checkbox", false, 0},
 			{"Glow ", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 			{"Hitbox", "Selection", "Off", {"Off", "On", "Color", "Rainbow"}, 100},
-		    {"Weapon Chams", "Checkbox", false, 0},
+		  --  {"Weapon Chams", "Checkbox", false, 0},
+		    {"Weapon Chams", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 		    {"No Hands", "Checkbox", false, 0},
 		    {"Barrel", "Checkbox", false, 0},
 		    {"Wire Models", "Checkbox", false, 0},
@@ -210,7 +212,8 @@ local options = {
 			{"View Fov", "Slider", 0, 150, 100},
    		    {"Viewmodel Fov", "Slider", 0, 150, 100},
 			{"Speed Indicator", "Checkbox", false, 0},
-			{"Wire Weapon", "Checkbox", false, 0},
+			--{"Wire Weapon", "Checkbox", false, 0},
+			{"Wire Weapon", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 			//{"Wire World", "Checkbox", false, 0},
 			{"Damage Log", "Selection", "Off", {"Off", "Console", "Chat"}, 100},
 		},
@@ -1592,6 +1595,7 @@ local function meme(ucmd)
 
 		cm.SetViewAngles(ucmd, GetAngle(fa));
 
+
 		return;
 --end
 
@@ -1764,12 +1768,11 @@ local function memee(ucmd)
 end
 hook.Add("CreateMove", "memmeme", memee)
 
-local function bugfix()
-if(!gBool("LegitBot", "Aimbot", "Enabled")) then
---FixMovement(ucmd, true);
-end
-if(gBool("LegitBot", "Aimbot", "Enabled")) then
---	FixMovement(ucmd, false);
+local function bugfix(cmd)
+if(cmd:KeyDown(IN_USE)) then
+hook.Remove("CreateMove", "memmeme")
+else
+hook.Add("CreateMove", "memmeme", memee)
 end
 end 
 hook.Add("CreateMove","PhysgunE", bugfix)
@@ -1818,7 +1821,7 @@ hook.Add("ShouldDrawLocalPlayer", "", function()
 end);
 // Auto Jump
 function bunnyhop(cmd)
-if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then	
+if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2 && LocalPlayer():IsFlagSet( FL_INWATER ) == false) then	
 	
 		if(!me:IsOnGround() && cmd:KeyDown(IN_JUMP)) then
 			cmd:RemoveKey(IN_JUMP);
@@ -1828,7 +1831,7 @@ if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveTyp
 			return
 		end
 		end
-	if(gBool("Misc", "Misc", "Auto-Strafe") && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then
+	if(gBool("Misc", "Misc", "Auto-Strafe") && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2 && LocalPlayer():IsFlagSet( FL_INWATER ) == false) then
 		if(!em.IsOnGround(me)) then
 			local mouseX = cmd:GetMouseX()
 				if(cmd:GetMouseX() > 1 || cmd:GetMouseX() < -1) then
@@ -2894,7 +2897,9 @@ local function Getnpcchamscolor(v, vis)
 end
 
 local function Chamsnpc(v)
-	if(gBool("Visuals", "ESP", "Chams") && gBool("Visuals", "Filter", "NPC")) then
+	if(gOption("Visuals", "ESP", "Chams") == "On" && gBool("Visuals", "Filter", "NPC")) then
+	--if(gOption("Visuals", "ESP", "Chams") == "On") then
+	--if(gBool("Visuals", "Filter", "NPC")) then
 	for k, v in pairs(ents.FindByClass("npc_*")) do
 	local r = gInt("Colors", "NPC - Chams", "Not Visible R") / 255;
 	local g = gInt("Colors", "NPC - Chams", "Not Visible G") / 255;
@@ -2919,13 +2924,42 @@ local function Chamsnpc(v)
 			
 		cam.End3D();
 	
+	--end
+	end
+end
+end
+
+local function ChamsnpcRainbow(v)
+if(gOption("Visuals", "ESP", "Chams") == "Rainbow" && gBool("Visuals", "Filter", "NPC")) then
+	for k, v in pairs(ents.FindByClass("npc_*")) do
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	
+		cam.Start3D();
+			
+			render.MaterialOverride(chamsmat);
+			-- notvis
+			local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+			render.SetColorModulation(color.r / 255,color.g / 255,color.b / 255);
+			
+				
+			v.DrawModel(v);
+				-- vis
+			
+			render.MaterialOverride(chamsmat2);
+			local rcolor = HSVToColor(255 - CurTime()  %6 * 60, 1 ,1)
+			render.SetColorModulation(rcolor.r / 255,rcolor.g / 255,rcolor.b / 255);	
+			v.DrawModel(v);
+			
+		cam.End3D();
+	
+	
 	end
 	end
 end
 
 hook.Add("RenderScreenspaceEffects", "npcchams", function()
 	if(!gBool("Visuals", "ESP", "Enabled")) then return; end
-
+        ChamsnpcRainbow(v);
 		Chamsnpc(v);
 	--end
 end);
@@ -2947,7 +2981,7 @@ local function Getplychams(v, vis)
 end
 
 local function Chamsply(v)
-	if(gBool("Visuals", "ESP", "Chams") && gBool("Visuals", "Filter", "Players")) then
+	if(gOption("Visuals", "ESP", "Chams") == "On" && gBool("Visuals", "Filter", "Players")) then
 	for k, v in pairs(player.GetAll()) do
 		if v == LocalPlayer() then continue end
 	local r = gInt("Colors", "Player - Chams", "Not Visible R") / 255;
@@ -2977,27 +3011,62 @@ local function Chamsply(v)
 	end
 end
 
+local function ChamsplyRainbow(v)
+if(gOption("Visuals", "ESP", "Chams") == "Rainbow" && gBool("Visuals", "Filter", "Players")) then
+	for k, v in pairs(player.GetAll()) do
+		if v == LocalPlayer() then continue end
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	
+		cam.Start3D();
+			
+			render.MaterialOverride(chamsmat);
+			-- notvis
+			local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+			render.SetColorModulation(color.r / 255,color.g / 255,color.b / 255);
+			
+				
+			v.DrawModel(v);
+				-- vis
+			
+			render.MaterialOverride(chamsmat2);
+			local rcolor = HSVToColor(255 - CurTime()  %6 * 60, 1 ,1)
+			render.SetColorModulation(rcolor.r / 255,rcolor.g / 255,rcolor.b / 255);	
+			v.DrawModel(v);
+			
+		cam.End3D();
+	
+	
+	end
+	end
+end
+
+
 hook.Add("RenderScreenspaceEffects", "plychams", function()
 	if(!gBool("Visuals", "ESP", "Enabled")) then return; end
-        
+        ChamsplyRainbow(v);
 		Chamsply(v);
 	--end
 end);
 
 
 hook.Add("PreDrawViewModel", "weapon chams", function(viewmodel, ply, weapon)
-if(gBool("Visuals", "ESP", "Weapon Chams")) then
+	if(gOption("Visuals", "ESP", "Weapon Chams") == "On") then
+--if(gBool("Visuals", "ESP", "Weapon Chams")) then
 		local r = gInt("Colors", "Weapon Chams", "R");
 		local g = gInt("Colors", "Weapon Chams", "G");
 		local b = gInt("Colors", "Weapon Chams", "B");
 		
     render.MaterialOverride(chamsmat);
     render.SetColorModulation(r,g,b);
-	
+	 end
+	 if(gOption("Visuals", "ESP", "Weapon Chams") == "Rainbow") then
+local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	 	 render.SetColorModulation(color.r,color.g,color.b, 150);
 	end
 end)
 
 hook.Add("PreDrawPlayerHands", "nohands", function()
+	
 	if(gBool("Visuals", "ESP", "No Hands")) then
 		return true
 	else
@@ -3507,9 +3576,10 @@ end
 end
 end)
 
-
+// wchams
 hook.Add("PreDrawViewModel", "Wirehandsweap", function()
-if(gBool("Visuals", "Other", "Wire Weapon")) then
+if (gOption("Visuals", "Other", "Wire Weapon") == "On") then
+--if(gBool("Visuals", "Other", "Wire Weapon")) then
         local ply = LocalPlayer()
 
 		local r = gInt("Colors", "Weapons", "R");
@@ -3520,13 +3590,18 @@ if(gBool("Visuals", "Other", "Wire Weapon")) then
 local matweapon = Material("models/wireframe")
 render.MaterialOverride(matweapon)
 render.SetColorModulation(r,g,b)
+else if (gOption("Visuals", "Other", "Wire Weapon") == "Rainbow") then
+local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+local matweapon = Material("models/wireframe")
+render.MaterialOverride(matweapon)
+render.SetColorModulation(color.r,color.g,color.b)
 
-else if(!gBool("Visuals", "Other", "Wire Weapon")) then
+else if (gOption("Visuals", "Other", "Wire Weapon") == "Off") then
 
 	local restoreweap = Material("")
 render.MaterialOverride(restoreweap)
 
-
+end
 end
 end
 end)
