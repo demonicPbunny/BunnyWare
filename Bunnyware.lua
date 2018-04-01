@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: Mar 31, 2018, 18:12 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Physgun E is now permanently fixed i promise")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:43 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Fixed Auto-Jump and Auto Strafe break in water")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -1814,7 +1814,7 @@ hook.Add("ShouldDrawLocalPlayer", "", function()
 end);
 // Auto Jump
 function bunnyhop(cmd)
-if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then	
+if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2  && LocalPlayer():IsFlagSet( FL_INWATER ) == false) then	
 	
 		if(!me:IsOnGround() && cmd:KeyDown(IN_JUMP)) then
 			cmd:RemoveKey(IN_JUMP);
@@ -1824,7 +1824,7 @@ if(gOption("Misc", "Misc", "Auto Jump") == "Perfect" && LocalPlayer():GetMoveTyp
 			return
 		end
 		end
-	if(gBool("Misc", "Misc", "Auto-Strafe") && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2) then
+	if(gBool("Misc", "Misc", "Auto-Strafe") && LocalPlayer():GetMoveType( MOVETYPE_NOCLIP ) == 2  && LocalPlayer():IsFlagSet( FL_INWATER ) == false) then
 		if(!em.IsOnGround(me)) then
 			local mouseX = cmd:GetMouseX()
 				if(cmd:GetMouseX() > 1 || cmd:GetMouseX() < -1) then
