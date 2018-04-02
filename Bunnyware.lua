@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:43 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Fixed Auto-Jump and Auto Strafe break in water")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 02, 2018, 18:21 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Money Printer now works on all Server. If not let me know with a screenshot. ")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -2340,8 +2340,8 @@ end)
 hook.Add("HUDPaint", "moneyprinterbox", function()
 if(gBool("Visuals", "Filter", "Dark RP")) then
 	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "2D Box") then	
-	for k, v in pairs(ents.FindByClass("money_printer")) do
-		--print("func works")
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
 	
 		    local r = gInt("Colors", "Items", "R");
 		   local g = gInt("Colors", "Items", "G");
@@ -2352,14 +2352,15 @@ if(gBool("Visuals", "Filter", "Dark RP")) then
 			local diff2 = math.abs(y2 - y1);
             surface.SetDrawColor(r,g,b)
 			surface.DrawOutlinedRect(x1-1,y1-1,diff+2,diff2+2)
-
+       end
 	end
 end
 end
 if(gBool("Visuals", "Filter", "Dark RP")) then
 	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Edges") then	
-	for k, v in pairs(ents.FindByClass("money_printer")) do
-		--print("func works")
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
+	--print("func works")
 	
 		    local r = gInt("Colors", "Items", "R");
 		   local g = gInt("Colors", "Items", "G");
@@ -2377,9 +2378,10 @@ if(gBool("Visuals", "Filter", "Dark RP")) then
         surface.DrawLine( x1, y2, x1, math.max( y2 - 10, y1 ) )
         surface.DrawLine( x2, y2, math.max( x2 - 10, x1 ), y2 )
         surface.DrawLine( x2, y2, x2, math.max( y2 - 10, y1 ) )
+               end
             end
-            end
-            end
+        end
+    end
 end )
 
 hook.Add("HUDPaint", "moneyprintername", function()
