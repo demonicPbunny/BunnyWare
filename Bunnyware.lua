@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 02, 2018, 18:21 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Money Printer now works on all Server. If not let me know with a screenshot. ")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:43 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Fixed Auto-Jump and Auto Strafe break in water")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -2386,7 +2386,8 @@ end )
 
 hook.Add("HUDPaint", "moneyprintername", function()
 		if(gBool("Visuals", "ESP", "Name") && gBool("Visuals", "Filter", "Dark RP")) then
-	    for k, v in pairs(ents.FindByClass("money_printer")) do
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
 			local x1,y1,x2,y2 = Get2DBounds(v);
 			local diff = math.abs(x2 - x1);
 			local diff2 = math.abs(y2 - y1);
@@ -2395,7 +2396,7 @@ hook.Add("HUDPaint", "moneyprintername", function()
 	    surface.SetFont("Bunnyware");
 
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
-		
+end		
 end
 end
 end)
@@ -3722,7 +3723,8 @@ hook.Add("HUDPaint", "circleespdarkrp",circleespdarkrp)
 local function circleespdarkrp2()
     if(gBool("Visuals", "Filter", "Dark RP")) then
 	if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Circle") then
-for k, v in pairs(ents.FindByClass("money_printer")) do
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
 		local r = gInt("Colors", "Items", "R");
 		local g = gInt("Colors", "Items", "G");
 		local b = gInt("Colors", "Items", "B");
@@ -3733,6 +3735,7 @@ end
    end
       end
          end
+            end
 hook.Add("HUDPaint", "circleespdarkrp2",circleespdarkrp2)
 
 
