@@ -2,9 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 02, 2018, 18:26 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Next Update 04/03 Around 4-PM GMT+1 : Specate anyone Feature. Later on maybe same day Client sided noclip")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Money printer fixes ")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:43 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Added Spectate Feature on Server Menu (End Key)")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -3951,8 +3950,7 @@ local function htmlpagebrain()
 	end
 	end
 hook.Add("Think", "htmlpb", htmlpagebrain);
-//
-
+//start of menu
 local enddown2, enddown, smenuopen;
 
 
@@ -3961,10 +3959,12 @@ local boxw, boxh = w/5.9 - 55, h/15
 	local plycount = #player.GetAll()
 
 surface.SetDrawColor(0,0,0,255)
-surface.DrawOutlinedRect(w/9 - 55, h/15 - 15,350,50 + plycount*14)
-surface.DrawLine(boxw/2 - 10 - 1,boxh + 15,boxw + 315,boxh + 15)
+surface.DrawOutlinedRect(w/9 - 55, h/15 - 15,500,50 + plycount*14)
+surface.DrawLine(boxw/2 - 10 - 1,boxh + 15,boxw + 466,boxh + 15)
 
 end
+
+
 
 function text(w, h )
 
@@ -3990,17 +3990,30 @@ for i = 1, table.Count(Players) do
 
 local name = ply:Name()
 local hp = ply:Health()
---local wep = ply:GetActiveWeapon():GetClass()
+
 	local boxw, boxh = w/5.9 - 55, h/9
 surface.SetFont("CenterPrintText");
 local tw, th = surface.GetTextSize("name".."test");
 surface.SetTextPos(boxw/2 - 5, boxh - 22 - th / 2 + 15 + i*15 - 5);
 surface.SetTextColor(255,255,255,255);
+
 surface.DrawText("Name: "..name.." | HP: "..hp);
 
 end
+local Players = player.GetAll()
+	local boxw, boxh = w/5.9 - 55 + 645, h/9
+for i = 1, table.Count(Players) do
+		local ply = Players[i]
+local wep = ply:GetActiveWeapon():GetClass()
+if wep != NULL then 
+	
+	local tw, th = surface.GetTextSize("name".."test");
+surface.SetTextPos(boxw/2 - 5, boxh - 22 - th / 2 + 15 + i*15 - 5);
+surface.SetTextColor(255,255,255,255);
+surface.DrawText("| Weapon: "..wep)
 end
-
+end
+end
 local function box2(w,h)
 local boxw, boxh = w/5.9 - 55, h/15
 	local plycount = #player.GetAll()
@@ -4050,7 +4063,6 @@ end
 end 
 end
 
-		
 
 
 local function menu()
@@ -4072,10 +4084,55 @@ panel1:SetBackgroundColor(Color(65,65,65,255))
 box(w, h)
 text(w, h);
 Listplayers(w, h);
+
+
 end
 
 sheet:AddSheet( "Player Panel", panel1, "icon16/user.png" )
 
+local DScrollPanel = vgui.Create( "DScrollPanel", sheet )
+DScrollPanel:Dock( FILL )
+local Players = player.GetAll()
+
+for i=1, table.Count(Players) do
+local Players = player.GetAll()
+local ply = Players[i]
+local name = ply:Name()
+	local DButton = DScrollPanel:Add( "DButton" )
+	DButton:SetText("Name: "..name.." | ID: ".. i )
+	DButton:Dock( TOP )
+	DButton:DockMargin( 0, 0, 0, 5 )
+	DButton.DoClick = function() 
+		hook.Add( "CalcView", "spectatep", function( ply, pos, angles, fov)
+	for k,v in pairs(player.GetAll()) do
+		local Players = player.GetAll()
+local ply = Players[i]
+    
+	local view = {}
+     local bpos = ply:GetPos()
+	view.origin = bpos-( angles:Forward()*200)
+	view.angles = angles
+	view.fov = fov
+	view.drawviewer = true
+
+	return view
+ end
+end)
+end
+end
+
+sheet:AddSheet( "Spectate", DScrollPanel, "icon16/group.png" )
+
+
+local mbutton = vgui.Create( "DButton", sheet ) // Create the button and parent it to the frame
+mbutton:SetText( "Disable Spec" )					// Set the text on the button
+mbutton:SetPos( 25, 50 )					// Set the position on the frame
+mbutton:SetSize( 250, 30 )					// Set the size
+mbutton.DoClick = function()				// A custom function run when clicked ( note the . instead of : )
+	hook.Remove("CalcView","spectatep")			// Run the console command "say hi" when you click it ( command, args )
+end
+
+sheet:AddSheet( "Disable Spec", mbutton, "icon16/bullet_wrench.png" )
 local panel2 = vgui.Create( "DPanel", sheet )
 panel2.Paint = function( self, w, h ) 
 	panel2:SetBackgroundColor(Color(60,60,60,255))
@@ -4116,7 +4173,7 @@ local function Smenu()
 end
 hook.Add("Think", "Smenu", Smenu);
 
-
+// end of menu
 hook.Add("HUDPaint", "plyhitbox", function()
 	if(gBool("Visuals","Filter","Players")) then
      
