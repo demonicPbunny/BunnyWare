@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 01, 2018, 19:43 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update:  Added Spectate Feature on Server Menu (End Key)")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 04, 2018, 19:12 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Esp Styles: Sphere, Diamond")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -161,7 +161,7 @@ local options = {
 			{"ESP", 20, 20, 250, 550, 120},
 			{"Enabled", "Checkbox", false, 0},
 			{"Classic ESP", "Checkbox", false, 0},
-			{"ESP Style", "Selection", "2D Box", {"2D Box", "Edges", "Circle"}, 100},
+			{"ESP Style", "Selection", "2D Box", {"2D Box", "3D Box", "Edges", "Circle", "Sphere", "Diamond"}, 100},
 			{"Name", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
 			{"Weapon", "Checkbox", false, 0},
@@ -4224,3 +4224,486 @@ local me = LocalPlayer()
 	end
 	end
 	end)
+
+hook.Add( "HUDPaint", "3dbox", function()
+if(gBool("Visuals", "Filter", "NPC")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+for k,v in pairs(ents.FindByClass("npc_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D(); 
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "3dboxitems", function()
+if(gBool("Visuals", "Filter", "Items")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+for k,v in pairs(ents.FindByClass("item_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D(); 
+	     end
+	  end
+   end
+end)
+hook.Add( "HUDPaint", "3dboxweapons", function()
+if(gBool("Visuals", "Filter", "Weapons")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+for k,v in pairs(ents.FindByClass("weapon_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+      if ( v:GetOwner() == NULL ) then
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D();
+	        end 
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "3dboxDarkrp", function()
+if(gBool("Visuals", "Filter", "Dark RP")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+for k,v in pairs(ents.FindByClass("spawned_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+      if ( v:GetOwner() == NULL ) then
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D();
+	        end 
+	     end
+	  end
+   end
+end)
+hook.Add( "HUDPaint", "3dboxDarkrp2", function()
+if(gBool("Visuals", "Filter", "Dark RP")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D();
+	          
+	        end 
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "3dboxply", function()
+if(gBool("Visuals", "Filter", "Players")) then
+if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "3D Box") then	
+for k,v in pairs(player.GetAll()) do
+	if v == LocalPlayer() then continue end 
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+   			local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");	
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+	render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( r,g,b, 255 ), true )   
+	cam.End3D();
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Spherenpc", function()
+ if(gBool("Visuals", "Filter", "NPC")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+for k,v in pairs(ents.FindByClass("npc_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	      end
+	   end
+   end
+end)
+
+hook.Add( "HUDPaint", "Sphereweapons", function()
+ if(gBool("Visuals", "Filter", "Weapons")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+for k,v in pairs(ents.FindByClass("weapon_*")) do
+	 if ( v:GetOwner() == NULL ) then
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "Weapons", "R");
+		   local g = gInt("Colors", "Weapons", "G");
+		  local b = gInt("Colors", "Weapons", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	         end
+	      end
+	   end
+   end
+end)
+
+
+hook.Add( "HUDPaint", "SphereItems", function()
+ if(gBool("Visuals", "Filter", "NPC")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+for k,v in pairs(ents.FindByClass("item_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	      end
+	   end
+   end
+end)
+
+
+hook.Add( "HUDPaint", "Spheredarkrp", function()
+ if(gBool("Visuals", "Filter", "Dark RP")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+for k,v in pairs(ents.FindByClass("spawned_*")) do
+	if ( v:GetOwner() == NULL ) then
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	         end
+	      end
+	   end
+   end
+end)
+
+
+hook.Add( "HUDPaint", "Spheredarkrp2", function()
+ if(gBool("Visuals", "Filter", "NPC")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then  
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	         end
+	      end
+	   end
+   end
+end)
+
+
+hook.Add( "HUDPaint", "Sphereply", function()
+ if(gBool("Visuals", "Filter", "Players")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Sphere") then	
+for k,v in pairs(player.GetAll()) do
+	if v == LocalPlayer() then continue end 
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+   			local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");	
+	
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 10, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	      end
+	   end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamondnpc", function()
+ if(gBool("Visuals", "Filter", "NPC")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+for k,v in pairs(ents.FindByClass("npc_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "NPC", "R");
+		   local g = gInt("Colors", "NPC", "G");
+		  local b = gInt("Colors", "NPC", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamondweapons", function()
+ if(gBool("Visuals", "Filter", "Weapons")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+for k,v in pairs(ents.FindByClass("weapon_*")) do
+	if ( v:GetOwner() == NULL ) then
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "Weapons", "R");
+		   local g = gInt("Colors", "Weapons", "G");
+		  local b = gInt("Colors", "Weapons", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	        end
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamonditems", function()
+ if(gBool("Visuals", "Filter", "Items")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+for k,v in pairs(ents.FindByClass("item_*")) do
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamonddarkrp", function()
+ if(gBool("Visuals", "Filter", "Dark RP")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+for k,v in pairs(ents.FindByClass("spawned_*")) do
+	if ( v:GetOwner() == NULL ) then
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	        end
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamonddarkrp2", function()
+ if(gBool("Visuals", "Filter", "Dark RP")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+		for k, v in pairs( ents.GetAll() ) do
+	   if v:GetModel() == "models/props_c17/consolebox01a.mdl" && v:IsScripted() == true then 
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "Items", "R");
+		   local g = gInt("Colors", "Items", "G");
+		  local b = gInt("Colors", "Items", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	        end
+	     end
+	  end
+   end
+end)
+
+hook.Add( "HUDPaint", "Diamondply", function()
+ if(gBool("Visuals", "Filter", "Players")) then
+ if(gBool("Visuals", "ESP", "Classic ESP") && gOption("Visuals", "ESP", "ESP Style") == "Diamond") then	
+for k,v in pairs(player.GetAll()) do
+	if v == LocalPlayer() then continue end
+	local pos = v:GetPos():ToScreen()
+	local min,max = v:GetModelBounds()
+
+   render.SetColorMaterial()
+   cam.Start3D();
+    local pos = v:GetPos()
+    local ang = v:GetAngles()
+    local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
+    local radius = v:BoundingRadius()
+	local wideSteps = 10
+	local tallSteps = 10
+	local center = v:OBBCenter()
+       			local r = gInt("Colors", "Players", "R");
+		   local g = gInt("Colors", "Players", "G");
+		  local b = gInt("Colors", "Players", "B");	
+	--print(v:GetModelBounds())
+	--render.DrawWireframeBox(Vector(pos.x,pos.y,pos.z), ang,  min, max, Color( color.r,color.g, color.b, 50 ), true ) 
+	render.DrawWireframeSphere(Vector(pos.x,pos.y,pos.z + center.z), radius, 10, 3, Color( r, g, b, 255 ) )  
+	cam.End3D(); 
+	     end
+	  end
+   end
+end)
