@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 04, 2018, 23:17 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: New Feature : Hit Information. Shows you a box of useful information")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 05, 2018, 00:46 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Hit Information now affect weapons. ESP weapon name now shows ammo info")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -2508,9 +2508,12 @@ hook.Add("HUDPaint", "weaponname", function()
 			local diff = math.abs(x2 - x1);
 			local diff2 = math.abs(y2 - y1);
 
-           surface.SetTextPos(x1,y1-25)
+           surface.SetTextPos(x1,y1+25)
 		surface.SetFont("Bunnyware");
 		surface.DrawText("[ "..language.GetPhrase(v:GetClass()).." ]");
+		surface.SetTextPos(x1,y1+45)
+		surface.SetFont("Bunnyware");
+		surface.DrawText("("..v:Clip1().." / "..v:GetMaxClip1()..")");
 	end
 end
 end
@@ -4711,6 +4714,7 @@ end)
 
 local function hitinfo()
 if(gBool("Visuals", "Other", "Hit Information")) then
+
 if LocalPlayer():GetEyeTrace().Entity:GetClass() == "worldspawn" then return end
 local HitHP = LocalPlayer():GetEyeTrace().Entity:Health()
 local HitName = LocalPlayer():GetEyeTrace().Entity:GetClass()
@@ -4727,8 +4731,14 @@ if LocalPlayer():GetEyeTrace().Entity:IsNPC() == true then
 surface.DrawText(" NPC INFO: ".."Name: "..language.GetPhrase(HitName).." |Health: "..HitHP)
 surface.SetTextPos(ScrW()/75,ScrH()/3 + 25)
 surface.SetFont("Bunnyware")
-local HitWeapon = LocalPlayer():GetEyeTrace().Entity:GetActiveWeapon():GetClass()
-surface.DrawText(" NPC INFO: ".."Weapon: "..language.GetPhrase(HitWeapon))
+
+if LocalPlayer():GetEyeTrace().Entity:GetActiveWeapon():GetClass() == NULL then
+	
+surface.DrawText(" NPC INFO: ".."Weapon: ".."None")
+
+else 
+surface.DrawText(" NPC INFO: ".."Weapon: "..language.GetPhrase(LocalPlayer():GetEyeTrace().Entity:GetActiveWeapon():GetClass()))
+end
 end
 if LocalPlayer():GetEyeTrace().Entity:IsPlayer() == true then 
 local HitHP = LocalPlayer():GetEyeTrace().Entity:Health()
@@ -4757,9 +4767,24 @@ if Hitweapon == NULL then
 surface.DrawText(" Weapon: Unkown")
 else 
 	surface.SetFont("Bunnyware")
-surface.DrawText(" Weapon: "..language.GetPhrase(HitWeapon))	
+surface.DrawText(" Weapon: "..language.GetPhrase(HitWeapon))
+end	
 end
-end
-end
+if LocalPlayer():GetEyeTrace().Entity:IsWeapon() == true then
+	local name = LocalPlayer():GetEyeTrace().Entity:GetPrintName()
+	local clip = LocalPlayer():GetEyeTrace().Entity:Clip1()
+	local clipp = LocalPlayer():GetEyeTrace().Entity:Clip2()
+	local clips = LocalPlayer():GetEyeTrace().Entity:GetMaxClip1()
+	local clipss = LocalPlayer():GetEyeTrace().Entity:GetMaxClip2()
+--	print(LocalPlayer():GetEyeTrace().Entity:IsWeapon() )
+	surface.SetTextColor(0,255,0)
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 5)
+surface.DrawText("  Name: "..language.GetPhrase(name))
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 25)
+surface.DrawText("  Ammo: ("..language.GetPhrase(clip).." / "..clips..") ")
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 45)
+surface.DrawText("  Alt-Ammo: ("..language.GetPhrase(clipp).." / "..clipss..") ")
+      end
+   end
 end
 hook.Add("HUDPaint","Hitinfo",hitinfo)	
