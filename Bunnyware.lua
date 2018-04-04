@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 04, 2018, 19:12 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Esp Styles: Sphere, Diamond")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 04, 2018, 23:17 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: New Feature : Hit Information. Shows you a box of useful information")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -210,6 +210,7 @@ local options = {
 			{"Wire Weapon", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
 			//{"Wire World", "Checkbox", false, 0},
 			{"Damage Log", "Selection", "Off", {"Off", "Console", "Chat"}, 100},
+			{"Hit Information", "Checkbox", false, 0}
 		},
 
 		
@@ -4707,3 +4708,58 @@ for k,v in pairs(player.GetAll()) do
 	  end
    end
 end)
+
+local function hitinfo()
+if(gBool("Visuals", "Other", "Hit Information")) then
+if LocalPlayer():GetEyeTrace().Entity:GetClass() == "worldspawn" then return end
+local HitHP = LocalPlayer():GetEyeTrace().Entity:Health()
+local HitName = LocalPlayer():GetEyeTrace().Entity:GetClass()
+surface.SetDrawColor(255,0,0,255)
+surface.DrawOutlinedRect(ScrW()/75,ScrH()/3,400,125)
+
+surface.SetTextPos(ScrW()/75,ScrH()/3)
+surface.SetTextColor(0,255,0)
+surface.SetDrawColor(65,65,65,155)
+surface.DrawRect(ScrW()/75,ScrH()/3,400,125)
+if LocalPlayer():GetEyeTrace().Entity:IsNPC() == true then 
+	surface.SetFont("Bunnyware")
+	surface.SetTextPos(ScrW()/75,ScrH()/3 + 5)
+surface.DrawText(" NPC INFO: ".."Name: "..language.GetPhrase(HitName).." |Health: "..HitHP)
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 25)
+surface.SetFont("Bunnyware")
+local HitWeapon = LocalPlayer():GetEyeTrace().Entity:GetActiveWeapon():GetClass()
+surface.DrawText(" NPC INFO: ".."Weapon: "..language.GetPhrase(HitWeapon))
+end
+if LocalPlayer():GetEyeTrace().Entity:IsPlayer() == true then 
+local HitHP = LocalPlayer():GetEyeTrace().Entity:Health()
+local HitName = LocalPlayer():GetEyeTrace().Entity:Name()
+surface.SetFont("Bunnyware")
+surface.SetDrawColor(65,65,65,155)
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 5)
+surface.DrawText(" Player info: ".."Name: "..HitName.." |Health: "..HitHP)
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 25)
+local Hitadmin = LocalPlayer():GetEyeTrace().Entity:IsAdmin()
+local Hitadmin2 = LocalPlayer():GetEyeTrace().Entity:IsSuperAdmin()	
+
+if Hitadmin == true or Hitadmin2 == true then
+	surface.SetFont("Bunnyware")
+surface.DrawText(" Admin: Yes")
+else 
+	surface.SetFont("Bunnyware")
+surface.DrawText(" Admin: No")
+
+end
+surface.SetTextPos(ScrW()/75,ScrH()/3 + 45)
+local HitWeapon = LocalPlayer():GetEyeTrace().Entity:GetActiveWeapon():GetClass()
+
+if Hitweapon == NULL then
+	surface.SetFont("Bunnyware")
+surface.DrawText(" Weapon: Unkown")
+else 
+	surface.SetFont("Bunnyware")
+surface.DrawText(" Weapon: "..language.GetPhrase(HitWeapon))	
+end
+end
+end
+end
+hook.Add("HUDPaint","Hitinfo",hitinfo)	
