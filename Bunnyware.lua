@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 05, 2018, 00:46 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Hit Information now affect weapons. ESP weapon name now shows ammo info")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 11, 2018, 23:26 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [server menu] Added: Client sided noclip")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -4137,6 +4137,15 @@ mbutton.DoClick = function()				// A custom function run when clicked ( note the
 end
 
 sheet:AddSheet( "Disable Spec", mbutton, "icon16/bullet_wrench.png" )
+
+local mbutton2 = vgui.Create( "DButton", sheet ) // Create the button and parent it to the frame
+mbutton2:SetText( "Client sided Noclip" )					// Set the text on the button
+mbutton2:SetPos( 25, 50 )					// Set the position on the frame
+mbutton2:SetSize( 250, 30 )					// Set the size
+mbutton2.DoClick = function()				// A custom function run when clicked ( note the . instead of : )
+	RunConsoleCommand("sw_toggle")
+end
+sheet:AddSheet( "Client sided Noclip", mbutton2, "icon16/bullet_wrench.png" )
 local panel2 = vgui.Create( "DPanel", sheet )
 panel2.Paint = function( self, w, h ) 
 	panel2:SetBackgroundColor(Color(60,60,60,255))
@@ -4788,3 +4797,79 @@ surface.DrawText("  Alt-Ammo: ("..language.GetPhrase(clipp).." / "..clipss..") "
    end
 end
 hook.Add("HUDPaint","Hitinfo",hitinfo)	
+
+
+local SW = {}
+ 
+SW.Enabled = false
+SW.ViewOrigin = Vector( 0, 0, 0 )
+SW.ViewAngle = Angle( 0, 0, 0 )
+SW.Velocity = Vector( 0, 0, 0 )
+ 
+function SW.CalcView( ply, origin, angles, fov )
+        if ( !SW.Enabled ) then return end
+        if ( SW.SetView ) then
+                SW.ViewOrigin = origin
+                SW.ViewAngle = angles
+               
+                SW.SetView = false
+        end
+        return { origin = SW.ViewOrigin, angles = SW.ViewAngle }
+end
+hook.Add( "CalcView", "SpiritWalk", SW.CalcView )
+ 
+function SW.CreateMove( cmd )
+        if ( !SW.Enabled ) then return end
+       
+        // Add and reduce the old velocity.
+        local time = FrameTime()
+        SW.ViewOrigin = SW.ViewOrigin + ( SW.Velocity * time )
+        SW.Velocity = SW.Velocity * 0.99
+       
+        // Rotate the view when the mouse is moved.
+        local sensitivity = 0.022
+        SW.ViewAngle.p = math.Clamp( SW.ViewAngle.p + ( cmd:GetMouseY() * sensitivity ), -89, 89 )
+        SW.ViewAngle.y = SW.ViewAngle.y + ( cmd:GetMouseX() * -1 * sensitivity )
+       
+        // What direction we're going to move in.
+        local add = Vector( 0, 0, 0 )
+        local ang = SW.ViewAngle
+        if ( cmd:KeyDown( IN_FORWARD ) ) then add = add + ang:Forward() end
+        if ( cmd:KeyDown( IN_BACK ) ) then add = add - ang:Forward() end
+        if ( cmd:KeyDown( IN_MOVERIGHT ) ) then add = add + ang:Right() end
+        if ( cmd:KeyDown( IN_MOVELEFT ) ) then add = add - ang:Right() end
+        if ( cmd:KeyDown( IN_JUMP ) ) then add = add + ang:Up() end
+        if ( cmd:KeyDown( IN_DUCK ) ) then add = add - ang:Up() end
+       
+        // Speed.
+        add = add:GetNormal() * time * 500
+        if ( cmd:KeyDown( IN_SPEED ) ) then add = add * 2 end
+       
+        SW.Velocity = SW.Velocity + add
+       
+        // This stops us looking around crazily while spiritwalking.
+        if ( SW.LockView == true ) then
+                SW.LockView = cmd:GetViewAngles()
+        end
+        if ( SW.LockView ) then
+                cmd:SetViewAngles( SW.LockView )
+        end
+       
+        // This stops us moving while spiritwalking.
+        cmd:SetForwardMove( 0 )
+        cmd:SetSideMove( 0 )
+        cmd:SetUpMove( 0 )
+end
+hook.Add( "CreateMove", "SpiritWalk", SW.CreateMove )
+ 
+function SW.Toggle()
+        SW.Enabled = !SW.Enabled
+        SW.LockView = SW.Enabled
+        SW.SetView = true
+       
+        local status = { [ true ] = "ON", [ false ] = "OFF" }
+        
+end
+concommand.Add( "sw_toggle", SW.Toggle )
+ // credit to RabidToaster for client sided noclip
+concommand.Add( "sw_pos", function() print( SW.ViewOrigin ) end )
