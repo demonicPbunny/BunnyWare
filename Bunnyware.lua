@@ -1,9 +1,11 @@
 
+
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 17, 2018, 21:30 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Added Experimental Weapon ESP, Disabled: Save Configuration. 100 Commits on github!")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Added Experimental Weapon ESP, Disabled: Save Configuration")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
 local next = next;
@@ -2687,8 +2689,9 @@ hook.Add("HUDPaint", "plyhealthnum", function()
 		local hp = v:Health() * h / 100;
 		if(hp > h) then hp = h; end
 		local diff = h - hp;
+		surface.SetFont("Bunnyware")
 		surface.SetTextColor( 255, 255, 255, 255 )
-		surface.SetTextPos( enemyPos.x - w / 1 - 5, enemyPos.y - h - 1, 3, h + 2 )
+		surface.SetTextPos( enemyPos.x - w / 1 - 25, enemyPos.y - h - 1, 3, h + 2 )
 		surface.DrawText(v:Health().." HP")
 		--surface.SetDrawColor(0, 0, 0, 255);
 		--surface.DrawRect(enemyPos.x - w / 2 - 5, enemyPos.y - h - 1, 3, h + 2);
@@ -2711,7 +2714,7 @@ hook.Add("HUDPaint", "plyname", function()
 		local tw, th = surface.GetTextSize(v:Name());
 		surface.SetFont("Bunnyware");
 		
-		 surface.SetTextPos(x1,y1)
+		 surface.SetTextPos(x1,y1 - 25)
 		surface.DrawText(v:Name());
 
 end
