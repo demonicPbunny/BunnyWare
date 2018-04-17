@@ -2,8 +2,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 11, 2018, 23:26 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [server menu] Added: Client sided noclip")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 17, 2018, 21:30 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Added Experimental Weapon ESP, Disabled: Save Configuration. 100 Commits on github!")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -164,7 +164,7 @@ local options = {
 			{"ESP Style", "Selection", "2D Box", {"2D Box", "3D Box", "Edges", "Circle", "Sphere", "Diamond"}, 100},
 			{"Name", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
-			{"Weapon", "Checkbox", false, 0},
+			{"Weapon", "Selection", "Off", {"Off", "Default", "Weapon (Experimental)"}, 100},
 			--{"Ammo", "Checkbox", false, 0},
 			{"XQZ", "Checkbox", false, 0},
 			{"Chams", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
@@ -427,8 +427,8 @@ local function updatevar( men, sub, lookup, new )
 end
 
 local function loadconfig()
-	if(!file.Exists("bunnyware.txt", "DATA")) then return; end
-	local tab = util.JSONToTable( file.Read("bunnyware.txt", "DATA") );
+	if(!file.Exists("bunnywareold.txt", "DATA")) then return; end
+	local tab = util.JSONToTable( file.Read("bunnywareold.txt", "DATA") );
 	local cursub;
 	for k,v in next, tab do
 		if(!options[k]) then continue; end
@@ -2739,9 +2739,9 @@ end)
 -- end
 -- end
 -- end)
-
+-- wepname
 hook.Add("HUDPaint", "plyweapon", function()
-		if(gBool("Visuals", "Filter", "Players") && gBool("Visuals", "ESP", "Weapon")) then
+		if(gBool("Visuals", "Filter", "Players") && gOption("Visuals", "ESP", "Weapon") == "Defualt") then
 	    for k, v in pairs(player.GetAll()) do
        if v == LocalPlayer() then continue end
 
@@ -2773,6 +2773,96 @@ end
 end
 end)
 
+
+hook.Add("HUDPaint", "plyweaponexperimental", function()
+		if(gBool("Visuals", "Filter", "Players") && gOption("Visuals", "ESP", "Weapon") == "Weapon (Experimental)") then
+	    for k, v in pairs(player.GetAll()) do
+       if v == LocalPlayer() then continue end
+
+		surface.SetTextColor( 255, 255, 255, 255 )
+		if table.Count( v:GetWeapons()) < 1  then continue end
+
+			local x1,y1,x2,y2 = Get2DBounds(v);
+			local diff = math.abs(x2 - x1);
+			local diff2 = math.abs(y2 - y1);
+				local wep2 = v:GetActiveWeapon()
+		if ( !IsValid( wep2 ) ) then 
+						surface.SetDrawColor(255,255,255,255)
+         surface.SetTextPos(x1,y2)
+		--surface.SetFont("DermaDefault");
+		--surface.SetFont("HL2MPTypeDeath");
+       
+        surface.DrawText("Unarmed");
+    end
+			local wep = v:GetActiveWeapon()
+		if ( IsValid( wep ) ) then
+      local reload = v:GetActiveWeapon():GetActivity()
+          --print(reload)
+		local tw,  th = surface.GetTextSize(v:GetActiveWeapon():GetClass());
+		surface.SetDrawColor(255,255,255,255)
+         surface.SetTextPos(x1,y2)
+		
+		
+       surface.SetFont("HL2MPTypeDeath");
+       if v:GetActiveWeapon():GetClass() == "weapon_smg1" then
+        surface.DrawText("/"); end
+        if v:GetActiveWeapon():GetClass() == "weapon_357" then
+        surface.DrawText("."); end
+                       if v:GetActiveWeapon():GetClass() == "weapon_crossbow" then
+        surface.DrawText("1"); end
+               if v:GetActiveWeapon():GetClass() == "weapon_ar2" then
+        surface.DrawText("2"); end
+               if v:GetActiveWeapon():GetClass() == "weapon_rpg" then
+        surface.DrawText("3"); end
+               if v:GetActiveWeapon():GetClass() == "weapon_pistol" then
+        surface.DrawText("-"); end
+               if v:GetActiveWeapon():GetClass() == "weapon_frag" then
+        surface.DrawText("4"); end
+               if v:GetActiveWeapon():GetClass() == "weapon_crowbar" then
+        surface.DrawText("6"); end
+                       if v:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+        surface.DrawText("!"); end
+                       if v:GetActiveWeapon():GetClass() == "weapon_physgun" then
+        surface.DrawText(","); end
+                        if v:GetActiveWeapon():GetClass() == "weapon_physcannon" then
+        surface.DrawText(","); end
+                         if v:GetActiveWeapon():GetClass() == "weapon_slam" then
+        surface.DrawText("*"); end
+                                 if v:GetActiveWeapon():GetClass() == "weapon_shotgun" then 
+        surface.DrawText("0"); end
+        surface.SetFont("DermaDefault");
+                                if v:GetActiveWeapon():GetClass() == "gmod_camera" then
+        surface.DrawText("Camera"); end
+         if v:GetActiveWeapon():GetClass() == "gmod_tool" then
+        surface.DrawText("Tool Gun");
+        end
+--         end
+--                end       
+--         end       
+--     end
+--     end
+--        end
+-- end
+-- end
+-- end
+-- end
+
+-- end       
+-- end
+
+         if (gBool("Visuals", "ESP", "Is Reloading") && reload == 183 && table.Count( v:GetWeapons()) > 1) then
+        	surface.DrawText("  [Reloading] ");
+        	if (table.Count( v:GetWeapons()) > 1) then
+        	surface.DrawText("[Unarmed]");
+        end 
+    end
+     --   if(gBool("Visuals", "ESP", "Ammo")) then
+     --   surface.DrawText(" Ammo: ( "..language.GetPhrase(v:GetActiveWeapon():Clip1()).." )");	
+        end
+--end    
+end
+end
+end)
 
 
 hook.Add("HUDPaint", "npchealth", function()
