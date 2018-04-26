@@ -4,7 +4,7 @@ if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 26, 2018, 19:47 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Misc Other] Added FakeWalk")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Misc Other] Added FakeWalk [HotFix] Default wep fix")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -167,7 +167,7 @@ local options = {
 			{"ESP Style", "Selection", "2D Box", {"2D Box", "3D Box", "Edges", "Circle", "Sphere", "Diamond"}, 100},
 			{"Name", "Checkbox", false, 0},
 			{"Health", "Selection", "Off", {"Off", "Bar", "Number", "Both"}, 100},
-			{"Weapon", "Selection", "Off", {"Off", "Default", "Weapon (Experimental)"}, 100},
+			{"Weapon", "Selection", "Off", {"Off", "On", "Weapon (Experimental)"}, 100},
 			--{"Ammo", "Checkbox", false, 0},
 			{"XQZ", "Checkbox", false, 0},
 			{"Chams", "Selection", "Off", {"Off", "On", "Rainbow"}, 100},
@@ -2781,13 +2781,16 @@ end)
 -- end
 -- end)
 -- wepname
+--"Weapon", "Selection", "Off", {"Off", "Default", "Weapon (Experimental)"}, 100},
 hook.Add("HUDPaint", "plyweapon", function()
-		if(gBool("Visuals", "Filter", "Players") && gOption("Visuals", "ESP", "Weapon") == "Defualt") then
+
+		if(gBool("Visuals", "Filter", "Players") && gOption("Visuals", "ESP", "Weapon") == "On") then
+     --print("test")
 	    for k, v in pairs(player.GetAll()) do
        if v == LocalPlayer() then continue end
 
 		surface.SetTextColor( 255, 255, 255, 255 )
-		if (v:GetActiveWeapon():GetClass() == Null) then continue end
+		if (v:GetActiveWeapon():GetClass() == NULL) then continue end
 
 			local x1,y1,x2,y2 = Get2DBounds(v);
 			local diff = math.abs(x2 - x1);
@@ -2799,7 +2802,7 @@ hook.Add("HUDPaint", "plyweapon", function()
          surface.SetTextPos(x1,y2)
 		
 		surface.SetFont("Bunnyware");
-        if(gBool("Visuals", "ESP", "Weapon")) then
+        if(gOption("Visuals", "ESP", "Weapon") == "On") then
         surface.DrawText("[ "..language.GetPhrase(v:GetActiveWeapon():GetClass()).." ]");
    end
 
