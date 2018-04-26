@@ -4,7 +4,7 @@ if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 26, 2018, 19:47 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Misc Other] Added FakeWalk [HotFix] Default wep fix")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Misc Other] Added FakeWalk [HotFix] Default wep fix [Menu] Reworked how Thirdperson slider looks")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -206,7 +206,7 @@ local options = {
 			{"ASUS Walls", "Slider2", 100, 100, 100},
 
 			{"Night Mode", "Slider2", 100, 100, 100},
-			{"Thirdperson ", "Slider", 0, -1000, 100},
+			{"Thirdperson ", "Slider2", 0, 1000, 100},
 			--{"View Fov", "Slider", 0, 150, 100},
    		    {"Viewmodel Fov", "Slider", 0, 150, 100},
 			{"Speed Indicator", "Checkbox", false, 0},
@@ -1564,9 +1564,11 @@ local function walldetect()
 		oy = -90;	
 	end
 end
-
+-- pThirdperson
 local function antiaimer(ucmd)
-	if( (cm.CommandNumber(ucmd) == 0 && (tonumber(gBool("Visuals", "Other", "Thirdperson "))) > -1) || cm.KeyDown(ucmd, 1) || cm.KeyDown(ucmd, 32) || aa || !gBool("Ragebot", "Anti-Aim", "Enabled")) then return; end
+
+	local pThirdperson = tonumber(gBool("Visuals", "Other", "Thirdperson "))
+	if( (cm.CommandNumber(ucmd) == 0 && (-pThirdperson) > -1) || cm.KeyDown(ucmd, 1) || cm.KeyDown(ucmd, 32) || aa || !gBool("Ragebot", "Anti-Aim", "Enabled")) then return; end
 	GetX();
 	GetY();
 	walldetect();
@@ -1843,15 +1845,16 @@ hook.Add("CalcView", "", function(p, o, a, f)
 		--local maxdist2 = gBool("Visuals", "Filter", "Thirdperson Distance");
 		
 	--print(maxdist2)
+	--local pThirdperson = tonumber(gBool("Visuals", "Other", "Thirdperson "))
 	     maxdist2 = gBool("Visuals", "Other", "Thirdperson ");
-		origin = (o + am.Forward(fa) * (tonumber(gBool("Visuals", "Other", "Thirdperson "))) || o),
+		origin = (o + am.Forward(fa) * (-tonumber(gBool("Visuals", "Other", "Thirdperson "))) || o),
 		fov = f,
 	});
 end);
 
 hook.Add("ShouldDrawLocalPlayer", "", function()
 	local maxdist2 = gBool("Misc", "Misc", "Thirdperson ");
-	return((tonumber(gBool("Visuals", "Other", "Thirdperson "))) < -1)
+	return((-tonumber(gBool("Visuals", "Other", "Thirdperson "))) < -1)
 end);
 // Auto Jump
 function bunnyhop(cmd)
