@@ -3,8 +3,8 @@
 if SERVER then return; end
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Welcome",Color( math.random(0, 255), math.random(0, 255), math.random(0, 255), 255 ), " ",LocalPlayer():Name()  )
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 0, 255 ), "Change logs can be find at : https://github.com/demonicPbunny/BunnyWare/commits/master")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 17, 2018, 21:30 GMT+1")
-chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: Added Experimental Weapon ESP, Disabled: Save Configuration")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Current Build: April 26, 2018, 19:47 GMT+1")
+chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Latest Update: [Misc Other] Added FakeWalk")
 chat.AddText( Color( 0, 255, 0, 255 ), "[BunnyWare]", Color( 255, 255, 255, 255 ), "Go to steamapps/common/GarrysMod/garrysmod/data And Remove Bunnyware.txt otherwise you cant use this after an update!!!!")
 
 local type = type;
@@ -155,6 +155,8 @@ local options = {
 			{"Min Y", "Slider", 0, 360, 150},
 			{"Emotion Randomcoin X", "Slider", 50, 100, 150},
 			{"Emotion Randomcoin Y", "Slider", 20, 100, 150},
+
+// pconfig
 		},
 	},
 	["Visuals"] = {
@@ -233,6 +235,8 @@ local options = {
 		{
 			{"Other", 400, 20, 350, 150, 220},
 			{"Kill Message", "Checkbox", false, 54},
+			{"FakeWalk", "Checkbox", false, 54},
+			{"Speed", "Slider", 15, 100, 100},
 			--{"God mode", "Checkbox", false, 54},
 			--{"Set Health ", "Slider", 0, 999, 100},
 			--{"Set Armor ", "Slider", 0, 999, 100},
@@ -1749,6 +1753,40 @@ end
 end
 end
 end
+-- pfake
+local function fakewalk( ucmd )
+
+if(gBool("Misc", "Other", "FakeWalk")) then
+	--print("works so far")
+local pSpeed = tonumber(gBool("Misc", "Other", "Speed"))
+if LocalPlayer():KeyDown( IN_SPEED ) then
+--cmd:RemoveKey(IN_SPEED)
+ucmd:RemoveKey(IN_FORWARD)
+ucmd:RemoveKey(IN_BACK)
+ucmd:RemoveKey(IN_LEFT)
+ucmd:RemoveKey(IN_RIGHT)
+--cmd:ClearMovement()
+ucmd:SetForwardMove(-1)
+ucmd:SetSideMove(-1)
+if LocalPlayer():KeyDown(IN_MOVERIGHT) then
+	ucmd:SetForwardMove(0)
+	ucmd:SetSideMove(pSpeed)
+
+	end
+if LocalPlayer():KeyDown(IN_MOVELEFT) then
+	ucmd:SetForwardMove(0)
+	ucmd:SetSideMove(-pSpeed)
+
+	end
+
+
+else 
+--else return
+      end
+   end
+end
+
+
 
 local function memee(ucmd)
 	meme(ucmd);
@@ -1759,6 +1797,7 @@ local function memee(ucmd)
 	salty.edgejump(ucmd);
 	Triggerbotnpc(ucmd);	
 	Triggerbot(ucmd);
+	fakewalk(ucmd)
 	
 end
 hook.Add("CreateMove", "memmeme", memee)
@@ -4965,3 +5004,6 @@ end
 concommand.Add( "sw_toggle", SW.Toggle )
  // credit to RabidToaster for client sided noclip
 concommand.Add( "sw_pos", function() print( SW.ViewOrigin ) end )
+
+
+
