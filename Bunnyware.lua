@@ -259,7 +259,7 @@ local options = {
 			{"R", "Slider", 255, 255, 88},
 			{"G", "Slider", 255, 255, 88},
 			{"B", "Slider", 0, 255, 88},
-			{"A", "Slider", 0, -7, 88},
+			{"A", "Slider", 0, 255, 88},
 		},
 		{
 			{"Players", 20, 205, 250, 175, 130},
@@ -3342,46 +3342,46 @@ hook.Add("PostDraw2DSkyBox", "no sky", function()
 end)
 
 // glow
-hook.Add( "PreDrawHalos", "AddHalos", function()
+hook.Add( "PostDrawEffects", "AddHalos", function()
 if(gBool("Visuals","Filter","NPC")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
 		local r = gInt("Colors", "Glow", "R");
 		local g = gInt("Colors", "Glow", "G");
 		local b = gInt("Colors", "Glow", "B");
 	    local a = gInt("Colors", "Glow", "A");	
-		halo.Add( ents.FindByClass( "npc_*" ) , Color( r, g, b ), a, a, 1, true, true )
+		halo.Add( ents.FindByClass( "npc_*" ) , Color( r, g, b ,a), 1, 1, 1, true, true )
 		end
 		  end
 		  if(gBool("Visuals","Filter","NPC")) then
 		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
        local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
 	    local a = gInt("Colors", "Glow", "A");
-		halo.Add( ents.FindByClass( "npc_*" ) , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+		halo.Add( ents.FindByClass( "npc_*" ) , Color( color.r, color.g, color.b , a), 1 ,1, 1, true, true )
 
 		end
 	end
 end )
-hook.Add( "PreDrawHalos", "AddHalos2", function()
+hook.Add( "PostDrawEffects", "AddHalos2", function()
 if(gBool("Visuals","Filter","Weapons")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
 		local r = gInt("Colors", "Glow", "R");
 		local g = gInt("Colors", "Glow", "G");
 		local b = gInt("Colors", "Glow", "B");
 	    local a = gInt("Colors", "Glow", "A");	
-		halo.Add( ents.FindByClass( "weapon_*" ) , Color( r, g, b ), a, a, 1, true, true )
+		halo.Add( ents.FindByClass( "weapon_*" ) , Color( r, g, b,a ), 1, 1, 1, true, true )
 		end
 		  end
 		  if(gBool("Visuals","Filter","Weapons")) then
 		    if(gOption("Visuals", "ESP", "Glow ") == "Rainbow") then	
        local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
 	    local a = gInt("Colors", "Glow", "A");
-		halo.Add( ents.FindByClass( "weapon_*" ) , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+		halo.Add( ents.FindByClass( "weapon_*" ) , Color( color.r, color.g, color.b , a), 1, 1, 1, true, true )
 
 		end
 	end
 end )
 
-hook.Add( "PreDrawHalos", "AddHalos4", function()
+hook.Add( "PostDrawEffects", "AddHalos4", function()
 if(gBool("Visuals","Filter","Items")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
 		local r = gInt("Colors", "Glow", "R");
@@ -3400,7 +3400,7 @@ if(gBool("Visuals","Filter","Items")) then
 		end
 	end
 end )
-hook.Add( "PreDrawHalos", "AddHalos5", function()
+hook.Add( "PostDrawEffects", "AddHalos5", function()
 if(gBool("Visuals","Filter","Players")) then
      if(gOption("Visuals", "ESP", "Glow ") == "On") then
 		local r = gInt("Colors", "Glow", "R");
@@ -3425,7 +3425,7 @@ if(gBool("Visuals","Filter","Players")) then
 	    	end	
        local color = HSVToColor( CurTime() % 6 * 60, 1, 1 )
 	    local a = gInt("Colors", "Glow", "A");
-		halo.Add(plys , Color( color.r, color.g, color.b ), a, a, 1, true, true )
+		halo.Add(plys , Color( color.r, color.g, color.b, a ), 1, 1, 1, true, true )
            
 		end
 	end
